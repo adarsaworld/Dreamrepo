@@ -1,0 +1,6 @@
+{
+  "name": "Kizen Empire - Executive Suite",
+  "description": "Autonomous gastronomy analytics, omnichannel menu distribution, and multi-branch operations command for Kizen Empire luxury dining syndicate.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
