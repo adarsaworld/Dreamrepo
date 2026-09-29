@@ -16,19 +16,19 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
   const notifications = [
     {
       id: '1',
-      title: 'Mirin Substitution Audit Required',
-      description: 'Dubai Marina kitchen requested halal verification on sakura reduction tare before evening service.',
-      outpost: 'Dubai Marina',
+      title: 'Kashmiri Mongra Saffron Par-Level Warning',
+      description: 'Central reserve dropped below 5 kg. Urgent air shipment dispatch recommended for festival prep.',
+      outpost: 'Mumbai BKC Flagship',
       time: '12m ago',
       type: 'warning',
-      action: 'Open Menu Studio',
-      tab: 'menu-studio',
+      action: 'Inspect Supply',
+      tab: 'inventory-supply',
     },
     {
       id: '2',
       title: 'Kitchen Dispatch Latency Peak (18m)',
-      description: 'Tokyo Roppongi experiencing cold-bar queue spike. 48/52 tables occupied.',
-      outpost: 'Tokyo Roppongi',
+      description: 'New Delhi Lutyens experiencing clay tandoor queue spike. 36/40 tables occupied.',
+      outpost: 'New Delhi Lutyens',
       time: '24m ago',
       type: 'alert',
       action: 'Engage Throttle',
@@ -36,9 +36,9 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
     },
     {
       id: '3',
-      title: 'VIP Omakase Table Seated',
-      description: 'Table 12 (6 covers) ordered Dassai Beyond 2019 pairing + A5 Miyazaki Wagyu Ribeye.',
-      outpost: 'Tokyo Roppongi',
+      title: 'Royal Durbar VIP Table Seated',
+      description: 'Table 12 (6 covers) ordered Sikandari Raan + Chene Grand Reserve 2018 vintage flight.',
+      outpost: 'Mumbai BKC Flagship',
       time: '35m ago',
       type: 'success',
       action: 'View Order Pulse',
@@ -46,13 +46,13 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
     },
     {
       id: '4',
-      title: 'Cellar Par-Level Warning',
-      description: 'Reserve Kaluga Queen Hybrid Caviar dropped below 10 tins in cellar inventory.',
-      outpost: 'All Outposts',
+      title: 'Bespoke Spice Blend Fast-Track Requested',
+      description: 'Hyderabad Jubilee Hills kitchen requested royal potli masala ratio verification before evening service.',
+      outpost: 'Hyderabad Jubilee Hills',
       time: '1h ago',
       type: 'warning',
-      action: 'Inspect Supply',
-      tab: 'inventory-supply',
+      action: 'Open Menu Studio',
+      tab: 'menu-studio',
     }
   ];
 

@@ -16,25 +16,29 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
 }) => {
   const [orderType, setOrderType] = useState<'reserve' | 'delivery'>('reserve');
   const [outpost, setOutpost] = useState<string>(
-    currentLocation === 'all' ? 'tokyo' : currentLocation
+    currentLocation === 'all' ? 'mumbai' : currentLocation
   );
   const [guests, setGuests] = useState<number>(4);
-  const [guestName, setGuestName] = useState<string>('Lord Sterling & Party');
-  const [tableType, setTableType] = useState<string>('VIP Private Tatami Suite');
-  const [selectedExperience, setSelectedExperience] = useState<string>('Autumn Grand Degustation (11-Course)');
+  const [guestName, setGuestName] = useState<string>('Maharaja Singhania & Party');
+  const [tableType, setTableType] = useState<string>('Royal Durbar VIP Suite');
+  const [selectedExperience, setSelectedExperience] = useState<string>('Royal Awadhi Grand Degustation (11-Course)');
   const [includePairing, setIncludePairing] = useState<boolean>(true);
-  const [notes, setNotes] = useState<string>('Guest prefers tamari-cured sashimi and rare vintage Champagne on arrival.');
+  const [notes, setNotes] = useState<string>('Guest prefers pure Jain preparation for 2 covers, extra saffron sheermal, and rare single malt reserve on arrival.');
 
   if (!isOpen) return null;
 
-  const basePricePerCover = selectedExperience.includes('Grand') ? 280 : 190;
-  const pairingPrice = includePairing ? 120 : 0;
+  const basePricePerCover = selectedExperience.includes('Grand')
+    ? 6500
+    : selectedExperience.includes('Signature')
+    ? 4800
+    : 5400;
+  const pairingPrice = includePairing ? 2500 : 0;
   const totalPrice = (basePricePerCover + pairingPrice) * guests;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSuccess(
-      `${orderType === 'reserve' ? 'Reservation confirmed' : 'Express order sent'}: ${guestName} (${guests} covers) at ${outpost.toUpperCase()} for $${totalPrice.toLocaleString()} USD.`
+      `${orderType === 'reserve' ? 'Reservation confirmed' : 'Express order sent'}: ${guestName} (${guests} covers) at ${outpost.toUpperCase()} for ₹${totalPrice.toLocaleString('en-IN')}.`
     );
     onClose();
   };
@@ -52,7 +56,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                 Express Reservation & Direct Dispatch
               </h3>
               <p className="text-xs text-[#a08e7a]">
-                Syndicate White-Label VIP Guest Ledger & POS Injection
+                Syndicate National VIP Guest Ledger & POS Injection
               </p>
             </div>
           </div>
@@ -96,18 +100,19 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-[#a08e7a] mb-1.5">
-                Target Outpost
+                Target Outpost (Metro)
               </label>
               <select
                 value={outpost}
                 onChange={(e) => setOutpost(e.target.value)}
                 className="w-full bg-[#292a2b] text-[#e3e2e3] px-3.5 py-2 rounded-lg text-sm border border-[#343536] focus:outline-none focus:ring-1 focus:ring-[#ffc174]"
               >
-                <option value="tokyo">Tokyo Roppongi</option>
-                <option value="nyc">New York SoHo</option>
-                <option value="london">London Mayfair</option>
-                <option value="dubai">Dubai Marina</option>
-                <option value="paris">Paris Le Marais</option>
+                <option value="mumbai">Mumbai BKC Flagship</option>
+                <option value="delhi">New Delhi Lutyens</option>
+                <option value="bengaluru">Bengaluru Indiranagar</option>
+                <option value="hyderabad">Hyderabad Jubilee Hills</option>
+                <option value="kolkata">Kolkata Park Street</option>
+                <option value="chennai">Chennai Nungambakkam</option>
               </select>
             </div>
 
@@ -152,20 +157,20 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                 onChange={(e) => setTableType(e.target.value)}
                 className="w-full bg-[#292a2b] text-[#e3e2e3] px-3.5 py-2 rounded-lg text-sm border border-[#343536] focus:outline-none focus:ring-1 focus:ring-[#ffc174]"
               >
-                <option value="VIP Private Tatami Suite">VIP Private Tatami Suite (Dedicated Server)</option>
+                <option value="Royal Durbar VIP Suite">Royal Durbar VIP Suite (Dedicated Server)</option>
                 <option value="Main Dining Room Banquette">Main Dining Room Center Banquette</option>
-                <option value="Chef Counter Omakase Bar">Chef Counter Omakase Bar (Front Row)</option>
-                <option value="Cellar Sommelier Table">Sommelier Reserve Vault Table</option>
+                <option value="Clay Tandoor & Sigdi Chef Counter">Clay Tandoor & Sigdi Chef Counter (Front Row)</option>
+                <option value="Sommelier Reserve Vault Table">Sommelier Reserve Vault Table</option>
               </select>
             </div>
           ) : (
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-[#a08e7a] mb-1.5">
-                Destination Address & Courier Instructions
+                Destination Address & Chauffeur Instructions
               </label>
               <input
                 type="text"
-                defaultValue="Penthouse 48B, The Carlyle • Direct Private Freight Elevators"
+                defaultValue="Penthouse 32, Altamount Road, Mumbai • Private Concierge Chauffeur"
                 className="w-full bg-[#292a2b] text-[#e3e2e3] px-3.5 py-2 rounded-lg text-sm border border-[#343536] focus:outline-none focus:ring-1 focus:ring-[#ffc174]"
               />
             </div>
@@ -173,21 +178,21 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
 
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-[#a08e7a] mb-1.5">
-              Curated Degustation Tier
+              Curated Royal Degustation Tier
             </label>
             <select
               value={selectedExperience}
               onChange={(e) => setSelectedExperience(e.target.value)}
               className="w-full bg-[#292a2b] text-[#e3e2e3] px-3.5 py-2 rounded-lg text-sm border border-[#343536] focus:outline-none focus:ring-1 focus:ring-[#ffc174]"
             >
-              <option value="Autumn Grand Degustation (11-Course)">
-                Autumn Grand Degustation ($280 / cover)
+              <option value="Royal Awadhi Grand Degustation (11-Course)">
+                Royal Awadhi Grand Degustation (₹6,500 / cover)
               </option>
-              <option value="Signature Robata & Caviar Flight (7-Course)">
-                Signature Robata & Caviar Flight ($190 / cover)
+              <option value="Signature Tandoori Truffle & Seafood Flight (7-Course)">
+                Signature Tandoori Truffle & Seafood Flight (₹4,800 / cover)
               </option>
-              <option value="Executive Omakase Selection (Seasonal)">
-                Executive Omakase Selection ($240 / cover)
+              <option value="Executive Nizam Shahi Dawat (Seasonal)">
+                Executive Nizam Shahi Dawat (₹5,400 / cover)
               </option>
             </select>
           </div>
@@ -204,15 +209,15 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
               />
               <label htmlFor="pairing-chk" className="cursor-pointer">
                 <span className="text-xs font-semibold text-[#e3e2e3] block">
-                  Add Junmai Daiginjo & Grand Cru Cellar Pairing
+                  Add Grover Zampa 'Chene Grand Reserve' & Single Malt Pairing
                 </span>
                 <span className="text-[11px] text-[#a08e7a]">
-                  Pre-allocated vintages curated by Master Sommelier Sofia (+$120/cover)
+                  Pre-allocated barrel vintages curated by Master Sommelier (+₹2,500/cover)
                 </span>
               </label>
             </div>
             <span className="text-xs font-bold text-[#ffc174] shrink-0 font-mono">
-              +${pairingPrice * guests}
+              +₹{(pairingPrice * guests).toLocaleString('en-IN')}
             </span>
           </div>
 
@@ -235,20 +240,21 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                 Projected Transaction Value
               </span>
               <span className="text-xl font-headline font-bold text-[#ffc174] font-mono">
-                ${totalPrice.toLocaleString()}.00 <span className="text-xs text-[#d8c3ad] font-normal">USD</span>
+                ₹{totalPrice.toLocaleString('en-IN')}{' '}
+                <span className="text-xs text-[#d8c3ad] font-normal">INR (Incl. GST)</span>
               </span>
             </div>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-lg bg-[#343536] hover:bg-[#39393a] text-xs font-semibold text-[#e3e2e3] transition-colors"
+                className="px-4 py-2 rounded-lg bg-[#343536] hover:bg-[#39393a] text-xs font-semibold text-[#e3e2e3] transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 rounded-lg bg-gradient-to-r from-[#f59e0b] to-[#ffc174] text-[#472a00] text-xs font-bold shadow-[0_0_15px_rgba(245,158,11,0.35)] hover:brightness-110 active:scale-95 transition-all flex items-center gap-1.5"
+                className="px-5 py-2 rounded-lg bg-gradient-to-r from-[#f59e0b] to-[#ffc174] text-[#472a00] text-xs font-bold shadow-[0_0_15px_rgba(245,158,11,0.35)] hover:brightness-110 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm">bolt</span>
                 <span>Direct Fire Order</span>

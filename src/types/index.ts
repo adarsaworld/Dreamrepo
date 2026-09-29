@@ -6,7 +6,7 @@ export type NavigationTab =
   | 'inventory-supply'
   | 'settings-integrations';
 
-export type LocationId = 'all' | 'tokyo' | 'nyc' | 'london' | 'dubai' | 'paris';
+export type LocationId = 'all' | 'mumbai' | 'delhi' | 'bengaluru' | 'hyderabad' | 'kolkata' | 'chennai';
 
 export interface LocationInfo {
   id: LocationId;
@@ -33,8 +33,8 @@ export interface LocationInfo {
 export interface MenuItem {
   id: string;
   name: string;
-  japaneseTitle?: string;
-  category: 'starters' | 'robata' | 'omakase' | 'cellar' | 'delivery';
+  hindiTitle?: string;
+  category: 'starters' | 'tandoor' | 'omakase' | 'cellar' | 'delivery';
   description: string;
   cogs: number;
   price: number;
@@ -95,9 +95,41 @@ export interface LiveOrder {
   timestamp: string;
 }
 
+export interface InventoryItem {
+  id: string;
+  name: string;
+  category: 'Spices & Saffron' | 'Luxury Proteins' | 'Cellar & Spirits' | 'Tandoor & Fuel' | 'Dairy & Ghee';
+  origin: string;
+  stockOnHand: number;
+  unit: string;
+  parLevel: number;
+  threshold: number;
+  unitCost: number;
+  status: 'Low Stock Alert' | 'Restock Triggered' | 'Adequate Reserve' | 'Order Recommended';
+  burnRate: string;
+  urgency: 'critical' | 'warning' | 'optimal';
+  supplier: string;
+  reorderLeadTime: string;
+  lastRestocked?: string;
+}
+
 export interface ToastMessage {
   id: string;
   title: string;
   description: string;
   type?: 'success' | 'info' | 'warning';
 }
+
+export interface InwardStockRecord {
+  id: string;
+  itemId: string;
+  itemName: string;
+  quantityAdded: number;
+  unit: string;
+  outpost: string;
+  requirementReason: string;
+  supplier: string;
+  totalCost: number;
+  timestamp: string;
+}
+

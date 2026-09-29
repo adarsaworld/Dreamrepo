@@ -9,29 +9,28 @@ interface MenuStudioViewProps {
 export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>(INITIAL_MENU_ITEMS);
   const [selectedCategory, setSelectedCategory] = useState<string>('starters');
-  const [selectedItemIndex, setSelectedItemIndex] = useState<number>(0);
-  const [dishTitle, setDishTitle] = useState('Smoked Otoro Tartare & Kaluga Caviar');
+  const [dishTitle, setDishTitle] = useState('Truffle Galouti Tartlet & 24K Vark');
   const [dishDesc, setDishDesc] = useState(
-    'Hand-diced wild Pacific bluefin fatty tuna cold-smoked with sakura wood chips, seasoned with Nikiri shoyu, aged yuzu kosho, and crowned with 15g reserve Kaluga Queen hybrid caviar. Served with nori crisps.'
+    'Melt-in-mouth Awadhi smoked lamb pate slow-cooked with 32 secret spices, infused with Himalayan black truffle oil, served on saffron sheermal crisps with bone marrow emulsion and edible gold foil.'
   );
-  const [salePrice, setSalePrice] = useState<number>(65.00);
-  const [cogsPrice, setCogsPrice] = useState<number>(18.50);
+  const [salePrice, setSalePrice] = useState<number>(4850);
+  const [cogsPrice, setCogsPrice] = useState<number>(1250);
   const [tags, setTags] = useState<string[]>([
-    'Dairy-Free',
+    'Awadhi Heritage',
     'Halal-Audited (Cert #H-921)',
-    'Contains Shellfish / Finfish',
+    '24K Gold Leaf',
     'Nut Allergy Alert: Safe',
-    'A5 Grade Certified',
+    'Royal Spice Guild Certified',
   ]);
   const [newTagInput, setNewTagInput] = useState('');
   const [showAddTagInput, setShowAddTagInput] = useState(false);
 
-  // Branch activation checkboxes
+  // Branch activation checkboxes for Indian metros
   const [branchActive, setBranchActive] = useState({
-    tokyo: true,
-    nyc: true,
-    london: true,
-    dubai: false,
+    mumbai: true,
+    delhi: true,
+    bengaluru: true,
+    hyderabad: false,
   });
 
   // Modals
@@ -51,7 +50,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
     setTimeout(() => {
       setIsFlushing(false);
       setSyncPercentage(100);
-      onShowToast('Fleet Gateways Synchronized', '0ms latency achieved across all 18 POS terminals and 140 QR tables.');
+      onShowToast('Indian Metro Gateways Synchronized', '0ms latency achieved across all 18 POS terminals and 140 QR tables.');
     }, 1400);
   };
 
@@ -63,7 +62,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
       setTimeout(() => {
         setDeploySuccess(false);
         setDeployModalOpen(false);
-        onShowToast('Autumn Degustation V3.4 Deployed', 'All edge nodes compiled and published to live tables.');
+        onShowToast('Royal Degustation V3.4 Deployed', 'All metro edge nodes compiled and published to live tables.');
       }, 1000);
     }, 1300);
   };
@@ -96,7 +95,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
           <div className="space-y-1.5">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[10px] uppercase font-bold tracking-wider text-[#ffc174] bg-[#f59e0b]/20 px-2.5 py-0.5 rounded-full border border-[#f59e0b]/30">
-                Syndicate Master Catalog
+                Syndicate National Master Catalog
               </span>
               <span className="text-xs text-[#56e5a9] flex items-center gap-1 font-medium">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#56e5a9] shadow-[0_0_8px_#56e5a9]" />
@@ -107,12 +106,12 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
               <h1 className="font-headline font-bold text-2xl sm:text-3xl text-[#e3e2e3] tracking-tight">
                 Menu Studio & Omnichannel Distribution
               </h1>
-              <span className="text-xs text-[#a08e7a] font-mono">v3.4-PROD-STAGED</span>
+              <span className="text-xs text-[#a08e7a] font-mono">v3.4-IND-STAGED</span>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-[#d8c3ad]">
               <span className="material-symbols-outlined text-base text-[#ffc174]">edit_calendar</span>
               <span>
-                Active Draft: <strong className="text-[#e3e2e3]">Autumn Degustation & Delivery V3.4 (Staged)</strong> — 42 total items ready for distribution
+                Active Draft: <strong className="text-[#e3e2e3]">Royal Awadhi Degustation & Dawat V3.4 (Staged)</strong> — 42 total items ready for national distribution
               </span>
             </div>
           </div>
@@ -128,12 +127,12 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
               <span>Preview Digital Menu</span>
             </button>
             <button
-              onClick={() => onShowToast('FX Arbitrage Tested', 'Cross-currency hedge verified across JPY, USD, GBP, and AED with 0.12% variance.')}
+              onClick={() => onShowToast('Inter-State Tax Verified', 'GST calibration verified across Maharashtra, Delhi-NCR, Karnataka, and Telangana.')}
               type="button"
               className="flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg bg-[#292a2b] hover:bg-[#343536] text-[#e3e2e3] text-xs font-semibold border border-[#343536] shadow-sm transition-all cursor-pointer"
             >
               <span className="material-symbols-outlined text-base text-[#a08e7a]">currency_exchange</span>
-              <span>FX Arbitrage Test</span>
+              <span>GST & Pricing Audit</span>
             </button>
             <button
               onClick={() => setDeployModalOpen(true)}
@@ -141,7 +140,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
               className="flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-lg bg-gradient-to-r from-[#f59e0b] to-[#ffc174] text-[#472a00] text-xs font-bold shadow-[0_0_24px_rgba(245,158,11,0.35)] hover:brightness-110 active:scale-95 transition-all cursor-pointer"
             >
               <span className="material-symbols-outlined text-base">rocket_launch</span>
-              <span>Deploy / Distribute to Branches</span>
+              <span>Deploy / Distribute to Metros</span>
             </button>
           </div>
         </div>
@@ -154,10 +153,10 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
           {/* Category Navigation Tabs */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
             {[
-              { id: 'starters', label: 'Starters & Crudo' },
-              { id: 'robata', label: 'Robata & Wood-Fired Mains' },
-              { id: 'omakase', label: 'Omakase Specials' },
-              { id: 'cellar', label: 'Cocktails & Cellar' },
+              { id: 'starters', label: 'Starters & Chaat' },
+              { id: 'tandoor', label: 'Tandoor & Dum Pukht Mains' },
+              { id: 'omakase', label: 'Royal Thali & Omakase' },
+              { id: 'cellar', label: 'Wines & Single Malts' },
               { id: 'delivery', label: 'Delivery Exclusives' },
             ].map((cat) => (
               <button
@@ -215,7 +214,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
               <div className="md:col-span-5 relative group overflow-hidden rounded-xl bg-[#0d0e0f] aspect-video md:aspect-auto h-48 md:h-full border border-[#292a2b]">
                 <img
                   className="w-full h-full object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
-                  alt="Smoked Otoro Tartare"
+                  alt="Truffle Galouti Tartlet"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcYCWWrgCEprsr0TFuKco5314Fxmz0hx7O5PTrCBQDaGGqU5bBX0_8pKR2P-E0KT4Wk_0UdwKaJNUj6DFHvNGe2UKUf6m2MTMvRH8UrDvW-WrhxT1PSKcbxBDU3gYC8Xj2RmWtqYKr4JXJYdbq6Z9Ktzf_PXoT_WIjsWMs9Np2Cb6S4cjHYxzH7XH-i-qs8xPNHbK3txa1d8_ABz9aU1WMxTLHq50UL0QJMkLnucdnjGRVpa0pJKoBhQ"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
@@ -256,22 +255,23 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                     <span className="text-[10px] text-[#a08e7a] uppercase font-bold">COGS (Est.)</span>
                     <div className="flex items-baseline gap-1 mt-0.5">
                       <span className="text-sm font-bold font-mono text-[#e3e2e3]">
-                        ${cogsPrice.toFixed(2)}
+                        ₹{cogsPrice.toLocaleString('en-IN')}
                       </span>
-                      <span className="text-[10px] text-[#a08e7a]">USD</span>
+                      <span className="text-[10px] text-[#a08e7a]">INR</span>
                     </div>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[10px] text-[#a08e7a] uppercase font-bold">Sale Price</span>
                     <div className="flex items-baseline gap-1 mt-0.5">
+                      <span className="text-xs text-[#ffc174] font-bold">₹</span>
                       <input
                         type="number"
-                        step="0.5"
+                        step="50"
                         value={salePrice}
                         onChange={(e) => setSalePrice(parseFloat(e.target.value) || 0)}
-                        className="w-16 bg-[#1f2021] text-sm font-bold font-mono text-[#ffc174] px-1 py-0.5 rounded border border-[#343536]"
+                        className="w-20 bg-[#1f2021] text-sm font-bold font-mono text-[#ffc174] px-1.5 py-0.5 rounded border border-[#343536]"
                       />
-                      <span className="text-[10px] text-[#a08e7a]">USD</span>
+                      <span className="text-[10px] text-[#a08e7a]">INR</span>
                     </div>
                   </div>
                   <div className="flex flex-col">
@@ -293,7 +293,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] text-[#a08e7a] uppercase tracking-wider font-bold">
-                  Allergen & Certification Tags
+                  Allergen & Indian Certification Tags
                 </span>
                 <button
                   type="button"
@@ -308,7 +308,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                 <form onSubmit={handleAddTag} className="flex items-center gap-2 p-2 bg-[#0d0e0f] rounded-lg border border-[#343536]">
                   <input
                     type="text"
-                    placeholder="e.g. Non-GMO Verified or Kosher-Certified"
+                    placeholder="e.g. FSSAI A1 Certified or Sattvic Verified"
                     value={newTagInput}
                     onChange={(e) => setNewTagInput(e.target.value)}
                     className="flex-1 bg-[#1f2021] text-xs text-[#e3e2e3] px-3 py-1.5 rounded border border-[#292a2b] focus:outline-none focus:ring-1 focus:ring-[#ffc174]"
@@ -335,7 +335,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                     key={tag}
                     className="px-2.5 py-1 rounded-full bg-[#292a2b] text-[#e3e2e3] text-xs flex items-center gap-1.5 border border-[#343536] shadow-sm"
                   >
-                    <span className="material-symbols-outlined text-xs text-[#56e5a9]">eco</span>
+                    <span className="material-symbols-outlined text-xs text-[#56e5a9]">verified</span>
                     <span>{tag}</span>
                     <button
                       type="button"
@@ -360,16 +360,16 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                     Automated Sommelier Upsell Pairing
                   </div>
                   <div className="text-sm font-bold text-[#e3e2e3]">
-                    Junmai Daiginjo 'Dassai Beyond' (2019 Vintage)
+                    Grover Zampa 'Chene Grand Reserve' (2018 Shiraz)
                   </div>
                   <div className="text-xs text-[#d8c3ad]">
-                    Attaches dynamically to digital guest ledger +$38/glass
+                    Attaches dynamically to digital guest ledger +₹2,800/glass
                   </div>
                 </div>
               </div>
               <button
                 type="button"
-                onClick={() => onShowToast('Pairing Logic Configured', 'Sommelier engine will prioritize Dassai Beyond for this dish.')}
+                onClick={() => onShowToast('Pairing Logic Configured', 'Sommelier engine will prioritize Chene Grand Reserve for this dish.')}
                 className="w-full md:w-auto px-4 py-1.5 rounded-lg bg-[#292a2b] hover:bg-[#343536] text-[#e3e2e3] text-xs font-semibold border border-[#343536] transition-colors whitespace-nowrap cursor-pointer"
               >
                 Configure Pairing Logic
@@ -379,7 +379,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
             {/* Additional Dish List Queue */}
             <div className="space-y-2 pt-2 border-t border-[#292a2b]">
               <div className="flex items-center justify-between text-xs text-[#a08e7a]">
-                <span>Other Items in 'Starters & Crudo' (3 Selected for Batch Edit)</span>
+                <span>Other Items in 'Starters & Chaat' (3 Selected for Batch Edit)</span>
                 <button
                   type="button"
                   onClick={() => onShowToast('New Item Staged', 'Blank dish card instantiated in master catalogue.')}
@@ -393,28 +393,28 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                 {/* Item Mini 1 */}
                 <div
                   onClick={() => {
-                    setDishTitle('Hokkaido Scallop & Finger Lime');
-                    setCogsPrice(8.40);
-                    setSalePrice(32.00);
-                    setDishDesc('Ultra-thin translucent crudo of wild caught Hokkaido scallops with finger lime pearls, white soy reduction, and shiso oil.');
-                    onShowToast('Active Dish Swapped', 'Switched editor focus to Hokkaido Scallop & Finger Lime.');
+                    setDishTitle('Malabar Bay Lobster & Kokum Pearls');
+                    setCogsPrice(820);
+                    setSalePrice(3200);
+                    setDishDesc('Poached Bay of Bengal spiny lobster tossed in roasted Tellicherry pepper and curry leaf butter, garnished with sour kokum pearls and crisp sourdough papad.');
+                    onShowToast('Active Dish Swapped', 'Switched editor focus to Malabar Bay Lobster.');
                   }}
                   className="flex items-center gap-3 p-2.5 rounded-lg bg-[#0d0e0f] border border-[#292a2b] hover:border-[#ffc174]/40 transition-all cursor-pointer"
                 >
                   <div className="h-12 w-12 rounded bg-[#292a2b] overflow-hidden shrink-0">
                     <img
                       className="h-full w-full object-cover"
-                      alt="Hokkaido Scallop"
+                      alt="Malabar Bay Lobster"
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_-aWHIOOQVvOHbyDmv7awT9nKYAxrihPs8XIvlouBcDvPuwTDP1el3UBdHjfHADPxkr8LijFQr03KnMvrARoE9JKZxlhcc8-lhLXOjHk3ZztIQjeXwnB5MGVxIw4eNVnVQG2MP1cWoOWbVr323Hw3UVItoL6TIDsvpSmT4MhJKPNi2ll8U3pAwN-5SaDqo-SFjh3KUjmzZEbYzSBv35verdn9CZEhoCNUGhOG1dN8dZbEUEWfP5PcJA"
                       referrerPolicy="no-referrer"
                     />
                   </div>
                   <div className="flex flex-col min-w-0 flex-1">
                     <span className="text-xs font-semibold text-[#e3e2e3] truncate">
-                      Hokkaido Scallop & Finger Lime
+                      Malabar Bay Lobster & Kokum Pearls
                     </span>
                     <span className="text-[11px] text-[#a08e7a] font-mono">
-                      $32.00 • COGS $8.40 (73.7% Margin)
+                      ₹3,200 • COGS ₹820 (74.4% Margin)
                     </span>
                   </div>
                   <span className="material-symbols-outlined text-[#56e5a9] text-base">check_circle</span>
@@ -423,28 +423,28 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                 {/* Item Mini 2 */}
                 <div
                   onClick={() => {
-                    setDishTitle('A5 Wagyu Crisp Taco (2pcs)');
-                    setCogsPrice(14.10);
-                    setSalePrice(44.00);
-                    setDishDesc('Crispy flash-fried nori shell loaded with hand-chopped A5 Miyazaki striploin tartare, freshly grated Shizuoka wasabi, and edible borage blossoms.');
-                    onShowToast('Active Dish Swapped', 'Switched editor focus to A5 Wagyu Crisp Taco.');
+                    setDishTitle('Charred Kashmiri Morel Khichdi Arancini');
+                    setCogsPrice(680);
+                    setSalePrice(2450);
+                    setDishDesc('Crispy fried aged Gobindobhog rice spheres stuffed with wild Himalayan Guchhi morels, 24-month aged Rajasthani goat cheese, dusted with saffron essence.');
+                    onShowToast('Active Dish Swapped', 'Switched editor focus to Charred Kashmiri Morel Arancini.');
                   }}
                   className="flex items-center gap-3 p-2.5 rounded-lg bg-[#0d0e0f] border border-[#292a2b] hover:border-[#ffc174]/40 transition-all cursor-pointer"
                 >
                   <div className="h-12 w-12 rounded bg-[#292a2b] overflow-hidden shrink-0">
                     <img
                       className="h-full w-full object-cover"
-                      alt="A5 Wagyu Crisp Taco"
+                      alt="Kashmiri Morel Arancini"
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnsbSICJJ7yE7U2_fxF3lhSj6nEcAPNMg3qEb0dlwPimE1FgjQYU5Kk_ifPL1rFeY63O8nJvJsWICGy2yMTsm9x7HM7O7myUJ-v_1KzgZ-z-OEyyVHn2ePmsH9MBbe5CdbOoI4WeJKkOvycawrbilZK4wbdEM0B-Hqqk_b_6TGaY4uUGDLRCOfOgXltnxeJflsreO8TPiDRC29vyIAY9y7xqNE2o8gAJKBcEl5aZ-lvtr52rVnm7y8TA"
                       referrerPolicy="no-referrer"
                     />
                   </div>
                   <div className="flex flex-col min-w-0 flex-1">
                     <span className="text-xs font-semibold text-[#e3e2e3] truncate">
-                      A5 Wagyu Crisp Taco (2pcs)
+                      Kashmiri Morel Khichdi Arancini
                     </span>
                     <span className="text-[11px] text-[#a08e7a] font-mono">
-                      $44.00 • COGS $14.10 (67.9% Margin)
+                      ₹2,450 • COGS ₹680 (72.2% Margin)
                     </span>
                   </div>
                   <span className="material-symbols-outlined text-[#56e5a9] text-base">check_circle</span>
@@ -463,46 +463,46 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                   Omnichannel Deployment Grid
                 </span>
                 <h2 className="font-headline font-bold text-base text-[#e3e2e3]">
-                  Branch Availability & Pricing
+                  Metro Branch Availability & Pricing
                 </h2>
               </div>
               <span className="px-2.5 py-1 rounded bg-[#292a2b] text-[#56e5a9] text-xs font-semibold flex items-center gap-1 border border-[#343536]">
                 <span className="h-2 w-2 rounded-full bg-[#56e5a9]" />
-                {Object.values(branchActive).filter(Boolean).length} Branches Active
+                {Object.values(branchActive).filter(Boolean).length} Metros Active
               </span>
             </div>
 
             <p className="text-xs text-[#d8c3ad] leading-relaxed">
-              Control live release flags across table-side e-ink tablets, kitchen display systems (KDS), Deliverect, and UberEats syndication endpoints.
+              Control live release flags across table-side e-ink tablets, kitchen display systems (KDS), Swiggy Gourmet, and Zomato syndication endpoints.
             </p>
 
             {/* Branch Listing Cards */}
             <div className="space-y-3">
-              {/* Tokyo */}
+              {/* Mumbai */}
               <div className="p-3.5 rounded-xl bg-[#0d0e0f] border border-[#292a2b] space-y-2 hover:border-[#ffc174]/30 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
-                      checked={branchActive.tokyo}
-                      onChange={(e) => setBranchActive({ ...branchActive, tokyo: e.target.checked })}
+                      checked={branchActive.mumbai}
+                      onChange={(e) => setBranchActive({ ...branchActive, mumbai: e.target.checked })}
                       className="h-4 w-4 rounded accent-[#f59e0b] cursor-pointer"
                     />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-[#e3e2e3]">Tokyo Roppongi</span>
+                        <span className="text-xs font-bold text-[#e3e2e3]">Mumbai BKC Flagship</span>
                         <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#56e5a9]/20 text-[#56e5a9] font-mono font-medium">
-                          JAP-HQ
+                          BOM-HQ
                         </span>
                       </div>
                       <span className="text-[11px] text-[#a08e7a]">
-                        Live on Tables • Deliverect Direct
+                        Live on Royal Tables • Direct Concierge
                       </span>
                     </div>
                   </div>
                   <div className="text-right font-mono">
-                    <span className="text-xs font-bold text-[#ffc174]">¥9,800</span>
-                    <div className="text-[10px] text-[#a08e7a]">Incl. 10% JCT</div>
+                    <span className="text-xs font-bold text-[#ffc174]">₹4,850</span>
+                    <div className="text-[10px] text-[#a08e7a]">Incl. 5% GST</div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between pt-1 border-t border-[#292a2b] text-[11px]">
@@ -510,35 +510,35 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                     <span className="material-symbols-outlined text-xs">check_circle</span>
                     Push Status: Synchronized
                   </span>
-                  <span className="font-mono text-[#a08e7a]">KDS Station: Raw/Cold Bar</span>
+                  <span className="font-mono text-[#a08e7a]">KDS Station: Sigdi/Tandoor</span>
                 </div>
               </div>
 
-              {/* NYC */}
+              {/* Delhi */}
               <div className="p-3.5 rounded-xl bg-[#0d0e0f] border border-[#292a2b] space-y-2 hover:border-[#ffc174]/30 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
-                      checked={branchActive.nyc}
-                      onChange={(e) => setBranchActive({ ...branchActive, nyc: e.target.checked })}
+                      checked={branchActive.delhi}
+                      onChange={(e) => setBranchActive({ ...branchActive, delhi: e.target.checked })}
                       className="h-4 w-4 rounded accent-[#f59e0b] cursor-pointer"
                     />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-[#e3e2e3]">New York SoHo</span>
+                        <span className="text-xs font-bold text-[#e3e2e3]">New Delhi Lutyens</span>
                         <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#f59e0b]/20 text-[#ffc174] font-mono font-medium">
-                          NYC-01
+                          DEL-01
                         </span>
                       </div>
                       <span className="text-[11px] text-[#a08e7a]">
-                        Live on Tables • UberEats Reserve
+                        Live on Tables • Zomato Legends
                       </span>
                     </div>
                   </div>
                   <div className="text-right font-mono">
-                    <span className="text-xs font-bold text-[#ffc174]">$65.00</span>
-                    <div className="text-[10px] text-[#a08e7a]">+ 8.875% NY Tax</div>
+                    <span className="text-xs font-bold text-[#ffc174]">₹4,850</span>
+                    <div className="text-[10px] text-[#a08e7a]">Incl. 5% GST</div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between pt-1 border-t border-[#292a2b] text-[11px]">
@@ -546,35 +546,35 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                     <span className="material-symbols-outlined text-xs">check_circle</span>
                     Push Status: Synchronized
                   </span>
-                  <span className="font-mono text-[#a08e7a]">KDS Station: Cold Appetizer</span>
+                  <span className="font-mono text-[#a08e7a]">KDS Station: Awadhi Dum</span>
                 </div>
               </div>
 
-              {/* London */}
+              {/* Bengaluru */}
               <div className="p-3.5 rounded-xl bg-[#0d0e0f] border border-[#292a2b] space-y-2 hover:border-[#ffc174]/30 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
-                      checked={branchActive.london}
-                      onChange={(e) => setBranchActive({ ...branchActive, london: e.target.checked })}
+                      checked={branchActive.bengaluru}
+                      onChange={(e) => setBranchActive({ ...branchActive, bengaluru: e.target.checked })}
                       className="h-4 w-4 rounded accent-[#f59e0b] cursor-pointer"
                     />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-[#e3e2e3]">London Mayfair</span>
+                        <span className="text-xs font-bold text-[#e3e2e3]">Bengaluru Indiranagar</span>
                         <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#292a2b] text-[#d8c3ad] font-mono font-medium">
-                          UK-LDN
+                          BLR-01
                         </span>
                       </div>
                       <span className="text-[11px] text-[#ffc174]">
-                        Scheduled for 18:00 GMT
+                        Scheduled for 18:00 IST
                       </span>
                     </div>
                   </div>
                   <div className="text-right font-mono">
-                    <span className="text-xs font-bold text-[#ffc174]">£54.00</span>
-                    <div className="text-[10px] text-[#a08e7a]">Incl. 20% VAT</div>
+                    <span className="text-xs font-bold text-[#ffc174]">₹4,650</span>
+                    <div className="text-[10px] text-[#a08e7a]">Incl. 5% GST</div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between pt-1 border-t border-[#292a2b] text-[11px]">
@@ -582,47 +582,47 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                     <span className="material-symbols-outlined text-xs">schedule</span>
                     Queued for Evening Service
                   </span>
-                  <span className="font-mono text-[#a08e7a]">KDS Station: Larder</span>
+                  <span className="font-mono text-[#a08e7a]">KDS Station: Pantry</span>
                 </div>
               </div>
 
-              {/* Dubai */}
+              {/* Hyderabad */}
               <div className="p-3.5 rounded-xl bg-[#0d0e0f] border border-[#292a2b] space-y-2 hover:border-[#ffc174]/30 transition-colors">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
-                      checked={branchActive.dubai}
-                      onChange={(e) => setBranchActive({ ...branchActive, dubai: e.target.checked })}
+                      checked={branchActive.hyderabad}
+                      onChange={(e) => setBranchActive({ ...branchActive, hyderabad: e.target.checked })}
                       className="h-4 w-4 rounded accent-[#f59e0b] cursor-pointer"
                     />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-[#e3e2e3]">Dubai Marina</span>
+                        <span className="text-xs font-bold text-[#e3e2e3]">Hyderabad Jubilee Hills</span>
                         <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#cc003c]/20 text-[#ffb3b6] font-mono font-medium">
-                          UAE-DBX
+                          HYD-01
                         </span>
                       </div>
                       <span className="text-[11px] text-[#ffb3b6]">
-                        Staged for Halal Audit
+                        Staged for Shahi Dum Verification
                       </span>
                     </div>
                   </div>
                   <div className="text-right font-mono">
-                    <span className="text-xs font-bold text-[#a08e7a]">AED 240</span>
-                    <div className="text-[10px] text-[#a08e7a]">Incl. 5% VAT</div>
+                    <span className="text-xs font-bold text-[#a08e7a]">₹4,500</span>
+                    <div className="text-[10px] text-[#a08e7a]">Incl. 5% GST</div>
                   </div>
                 </div>
                 <div className="flex items-center justify-between pt-1 border-t border-[#292a2b] text-[11px]">
                   <span className="flex items-center gap-1 text-[#ffb3b6]">
                     <span className="material-symbols-outlined text-xs">pending_actions</span>
-                    Mirin Sauce Substitution Check
+                    Bespoke Potli Masala Ratio Check
                   </span>
                   <button
                     type="button"
                     onClick={() => {
-                      setBranchActive({ ...branchActive, dubai: true });
-                      onShowToast('Audit Fast-Tracked', 'Approved alcohol-free mirin substitution for Dubai Marina menu.');
+                      setBranchActive({ ...branchActive, hyderabad: true });
+                      onShowToast('Audit Fast-Tracked', 'Approved spice blend for Hyderabad Jubilee Hills kitchen.');
                     }}
                     className="text-[#ffc174] hover:underline font-semibold cursor-pointer"
                   >
@@ -637,7 +637,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-base text-[#ffc174]">cloud_sync</span>
-                  <span className="text-xs font-bold text-[#e3e2e3]">Global Sync Status</span>
+                  <span className="text-xs font-bold text-[#e3e2e3]">National Sync Status</span>
                 </div>
                 <span className="text-xs font-mono font-bold text-[#56e5a9]">{syncPercentage}% Synced</span>
               </div>
@@ -660,7 +660,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                 </div>
                 <div className="flex flex-col">
                   <span className="font-bold text-[#e3e2e3] font-mono text-sm">6</span>
-                  <span className="text-[10px]">Third-Party APIs</span>
+                  <span className="text-[10px]">Aggregator APIs</span>
                 </div>
               </div>
 
@@ -673,7 +673,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                 <span className={`material-symbols-outlined text-base text-[#ffc174] ${isFlushing ? 'animate-spin' : ''}`}>
                   sync
                 </span>
-                <span>{isFlushing ? 'Flushing API Gateways...' : 'Force Instant Flush & Resync'}</span>
+                <span>{isFlushing ? 'Flushing Indian Gateways...' : 'Force Instant Flush & Resync'}</span>
               </button>
             </div>
           </div>
@@ -727,20 +727,20 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                 </span>
               </div>
               <div className="font-headline font-bold text-sm text-[#e3e2e3] group-hover:text-[#ffc174] transition-colors">
-                Summer Solstice 2024
+                Monsoon Mehfil 2024
               </div>
               <p className="text-xs text-[#d8c3ad] leading-relaxed">
-                Celebrated raw ocean crudo, yuzu-lime granita, and cold somen pairings across 6 locations.
+                Celebrated wild coastal raw mango crudo, kokum granita, and slow-roasted corn bhutte across 6 metro locations.
               </p>
             </div>
             <div className="pt-2 flex items-center justify-between border-t border-[#292a2b]">
               <div className="flex flex-col">
                 <span className="text-[10px] text-[#a08e7a]">Total Run Sales</span>
-                <span className="text-xs font-bold text-[#e3e2e3] font-mono">$1.42M USD</span>
+                <span className="text-xs font-bold text-[#e3e2e3] font-mono">₹1.42 Cr INR</span>
               </div>
               <button
                 type="button"
-                onClick={() => handleRestoreVaultItem('CAT-2024-Q3', 'Summer Solstice 2024')}
+                onClick={() => handleRestoreVaultItem('CAT-2024-Q3', 'Monsoon Mehfil 2024')}
                 className="px-3 py-1.5 rounded-lg bg-[#292a2b] hover:bg-[#ffc174] hover:text-[#472a00] text-[#e3e2e3] text-xs font-semibold transition-all flex items-center gap-1 border border-[#343536] cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm">settings_backup_restore</span>
@@ -759,20 +759,20 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                 </span>
               </div>
               <div className="font-headline font-bold text-sm text-[#e3e2e3] group-hover:text-[#ffc174] transition-colors">
-                Golden Sakura Spring Edition
+                Royal Rajputana Spring Edition
               </div>
               <p className="text-xs text-[#d8c3ad] leading-relaxed">
-                Infused cherry blossom dashi, A5 Sendai striploin, and limited edition Junmai vintage releases.
+                Infused Mathania red chili braised shanks, smoked dal baati, and vintage Chene Grand Reserve barrel releases.
               </p>
             </div>
             <div className="pt-2 flex items-center justify-between border-t border-[#292a2b]">
               <div className="flex flex-col">
                 <span className="text-[10px] text-[#a08e7a]">Total Run Sales</span>
-                <span className="text-xs font-bold text-[#e3e2e3] font-mono">$1.89M USD</span>
+                <span className="text-xs font-bold text-[#e3e2e3] font-mono">₹1.89 Cr INR</span>
               </div>
               <button
                 type="button"
-                onClick={() => handleRestoreVaultItem('CAT-2024-Q2', 'Golden Sakura Spring Edition')}
+                onClick={() => handleRestoreVaultItem('CAT-2024-Q2', 'Royal Rajputana Spring Edition')}
                 className="px-3 py-1.5 rounded-lg bg-[#292a2b] hover:bg-[#ffc174] hover:text-[#472a00] text-[#e3e2e3] text-xs font-semibold transition-all flex items-center gap-1 border border-[#343536] cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm">settings_backup_restore</span>
@@ -791,20 +791,20 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                 </span>
               </div>
               <div className="font-headline font-bold text-sm text-[#e3e2e3] group-hover:text-[#ffc174] transition-colors">
-                Late Night Izakaya Pop-up
+                Late Night Shahi Chaat & Biryani
               </div>
               <p className="text-xs text-[#d8c3ad] leading-relaxed">
-                Binchotan grilled skewers, Japanese highballs, and spicy street bao for after-midnight service.
+                Binchotan grilled tandoori skewers, spiced kesar highballs, and street-style kakori rolls for after-midnight service.
               </p>
             </div>
             <div className="pt-2 flex items-center justify-between border-t border-[#292a2b]">
               <div className="flex flex-col">
                 <span className="text-[10px] text-[#a08e7a]">Total Run Sales</span>
-                <span className="text-xs font-bold text-[#e3e2e3] font-mono">$620K USD</span>
+                <span className="text-xs font-bold text-[#e3e2e3] font-mono">₹62.0 Lakh INR</span>
               </div>
               <button
                 type="button"
-                onClick={() => handleRestoreVaultItem('CAT-2024-POPUP', 'Late Night Izakaya Pop-up')}
+                onClick={() => handleRestoreVaultItem('CAT-2024-POPUP', 'Late Night Shahi Chaat')}
                 className="px-3 py-1.5 rounded-lg bg-[#292a2b] hover:bg-[#ffc174] hover:text-[#472a00] text-[#e3e2e3] text-xs font-semibold transition-all flex items-center gap-1 border border-[#343536] cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm">settings_backup_restore</span>
@@ -824,11 +824,11 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                 <div className="flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-[#f59e0b] animate-ping" />
                   <span className="text-[10px] uppercase font-bold tracking-wider text-[#ffc174]">
-                    Fleet Wide Release Protocol
+                    National Fleet Release Protocol
                   </span>
                 </div>
                 <h3 className="font-headline font-bold text-lg text-[#e3e2e3]">
-                  Confirm Global Menu Push
+                  Confirm Indian Metros Menu Push
                 </h3>
               </div>
               <button
@@ -841,12 +841,12 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
 
             <div className="space-y-2 text-xs text-[#d8c3ad] leading-relaxed">
               <p>
-                You are about to distribute <strong className="text-[#e3e2e3]">Autumn Degustation & Delivery V3.4 (Staged)</strong> across selected syndicate branches. This command will simultaneously:
+                You are about to distribute <strong className="text-[#e3e2e3]">Royal Awadhi Degustation & Dawat V3.4 (Staged)</strong> across selected Indian syndicate branches. This command will simultaneously:
               </p>
               <ul className="space-y-1 pl-4 list-disc text-[#e3e2e3]">
-                <li>Recompile and invalidate Redis edge caches in Tokyo, NYC, and London.</li>
+                <li>Recompile and invalidate Redis edge caches in Mumbai, Delhi, Bengaluru, and Hyderabad.</li>
                 <li>Update guest-facing interactive QR codex and Sommelier wine pairing matrix.</li>
-                <li>Broadcast modified item price tags to Deliverect & UberEats POS middleware.</li>
+                <li>Broadcast modified INR prices to Swiggy Gourmet & Zomato Legends POS middleware.</li>
               </ul>
             </div>
 
@@ -854,28 +854,28 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
             <div className="space-y-1.5 bg-[#0d0e0f] p-3 rounded-lg border border-[#292a2b] text-xs">
               <div className="flex items-center justify-between text-[#e3e2e3]">
                 <span className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#56e5a9]" /> Tokyo Roppongi
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#56e5a9]" /> Mumbai BKC Flagship
                 </span>
-                <span className="text-[#56e5a9] font-mono">Ready (¥9,800)</span>
+                <span className="text-[#56e5a9] font-mono">Ready (₹4,850)</span>
               </div>
               <div className="flex items-center justify-between text-[#e3e2e3]">
                 <span className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#56e5a9]" /> New York SoHo
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#56e5a9]" /> New Delhi Lutyens
                 </span>
-                <span className="text-[#56e5a9] font-mono">Ready ($65.00)</span>
+                <span className="text-[#56e5a9] font-mono">Ready (₹4,850)</span>
               </div>
               <div className="flex items-center justify-between text-[#e3e2e3]">
                 <span className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#ffc174]" /> London Mayfair
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#ffc174]" /> Bengaluru Indiranagar
                 </span>
-                <span className="text-[#ffc174] font-mono">Scheduled 18:00 GMT (£54.00)</span>
+                <span className="text-[#ffc174] font-mono">Scheduled 18:00 IST (₹4,650)</span>
               </div>
               <div className="flex items-center justify-between text-[#e3e2e3]">
                 <span className="flex items-center gap-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#cc003c]" /> Dubai Marina
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#cc003c]" /> Hyderabad Jubilee Hills
                 </span>
                 <span className="text-[#ffb3b6] font-mono">
-                  {branchActive.dubai ? 'Fast-Track Approved (AED 240)' : 'Awaiting Halal Cert Check'}
+                  {branchActive.hyderabad ? 'Fast-Track Approved (₹4,500)' : 'Awaiting Shahi Dum Ratio Check'}
                 </span>
               </div>
             </div>
@@ -898,7 +898,7 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                   {deploySuccess ? 'done_all' : isDeploying ? 'refresh' : 'send'}
                 </span>
                 <span>
-                  {deploySuccess ? 'Pushed Successfully!' : isDeploying ? 'Transmitting to Edges...' : 'Execute Instant Deployment'}
+                  {deploySuccess ? 'Pushed Successfully!' : isDeploying ? 'Transmitting to Indian Edges...' : 'Execute Instant Deployment'}
                 </span>
               </button>
             </div>
@@ -950,11 +950,11 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                     {dishTitle}
                   </h4>
                   <p className="text-xs text-[#d8c3ad] mt-1">
-                    Paired with Dassai Beyond 2019 • Sakura wood cold smoked table side
+                    Paired with Grover Zampa Chene Grand Reserve • Royal Dum Pukht smoked table side
                   </p>
                 </div>
                 <span className="font-headline font-bold text-lg text-[#ffc174] font-mono">
-                  ${salePrice.toFixed(2)}
+                  ₹{salePrice.toLocaleString('en-IN')}
                 </span>
               </div>
             </div>

@@ -34,7 +34,7 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
 
   const handleExportCSV = () => {
     const rows = [
-      ['Node Code', 'Location', 'Gross Revenue USD', 'Tables Occupied', 'Kitchen Latency Min', 'Orders Per Hour'],
+      ['Node Code', 'Location', 'Gross Revenue (₹)', 'Tables Occupied', 'Kitchen Latency Min', 'Orders Per Hour'],
       ...displayLocations.map(l => [
         l.code,
         l.name,
@@ -76,7 +76,7 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
   const handleSendBroadcast = (e: React.FormEvent) => {
     e.preventDefault();
     setBroadcastPromptOpen(false);
-    onShowToast('Kitchen Broadcast Dispatched', `Memo sent to Roppongi, SoHo, Mayfair & Marina KDS monitors: "${broadcastMsg}"`);
+    onShowToast('Kitchen Broadcast Dispatched', `Memo sent to Mumbai BKC, New Delhi, Bengaluru & Hyderabad KDS monitors: "${broadcastMsg}"`);
   };
 
   return (
@@ -95,10 +95,10 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
             </span>
           </div>
           <h1 className="font-headline font-bold text-2xl sm:text-3xl text-[#e3e2e3] tracking-tight">
-            Multi-Branch Command & Global Performance
+            Multi-Branch Command & National Performance
           </h1>
           <p className="text-xs sm:text-sm text-[#d8c3ad] max-w-2xl leading-relaxed">
-            Autonomous telemetry, aggregate yield pacing, and live kitchen dispatch load across luxury portfolio locations.
+            Autonomous telemetry, aggregate yield pacing, and live kitchen dispatch load across luxury metropolitan hubs in India.
           </p>
         </div>
 
@@ -138,7 +138,7 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
           </div>
 
           <button
-            onClick={() => onShowToast('Node Filter Ready', 'Displaying all currently operational metropolitan nodes.')}
+            onClick={() => onShowToast('Node Filter Ready', 'Displaying operational metrics across Mumbai, Delhi, Bengaluru, Hyderabad, Kolkata & Chennai.')}
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#292a2b] hover:bg-[#343536] text-[#e3e2e3] text-xs font-semibold border border-[#343536] transition-all cursor-pointer"
           >
             <span className="material-symbols-outlined text-base text-[#a08e7a]">tune</span>
@@ -150,7 +150,7 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#292a2b] hover:bg-[#343536] text-[#e3e2e3] text-xs font-semibold border border-[#343536] transition-all cursor-pointer"
           >
             <span className="material-symbols-outlined text-base text-[#ffc174]">download</span>
-            <span>Audit CSV</span>
+            <span>Audit CSV (INR)</span>
           </button>
         </div>
       </div>
@@ -170,9 +170,9 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
           </div>
           <div className="mt-2.5 flex items-baseline gap-1.5">
             <span className="font-headline font-bold text-2xl sm:text-3xl text-[#e3e2e3] tracking-tight font-mono">
-              ${totalRevenue.toLocaleString()}
+              ₹{totalRevenue.toLocaleString('en-IN')}
             </span>
-            <span className="text-xs text-[#a08e7a]">USD</span>
+            <span className="text-xs text-[#a08e7a]">INR</span>
           </div>
           {/* Sparkline curve */}
           <div className="mt-3 flex items-end justify-between h-9 pt-1">
@@ -197,7 +197,7 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
             </svg>
           </div>
           <div className="mt-2 flex items-center justify-between text-xs text-[#d8c3ad] pt-1 border-t border-[#292a2b]">
-            <span>Vs. prior cycle: $161,900</span>
+            <span>Vs. prior cycle: ₹16,19,000</span>
             <span className="text-[#56e5a9] font-semibold">99.4% target hit</span>
           </div>
         </div>
@@ -258,15 +258,15 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
           </div>
           <div className="mt-3 grid grid-cols-3 gap-1.5 text-center">
             <div className="bg-[#1f2021] p-1.5 rounded-lg border border-[#292a2b]">
-              <div className="text-[10px] text-[#a08e7a]">Deliverect</div>
+              <div className="text-[10px] text-[#a08e7a]">Swiggy Gourmet</div>
               <div className="text-xs font-bold text-[#e3e2e3] font-mono">54%</div>
             </div>
             <div className="bg-[#1f2021] p-1.5 rounded-lg border border-[#292a2b]">
-              <div className="text-[10px] text-[#a08e7a]">UberEats</div>
+              <div className="text-[10px] text-[#a08e7a]">Zomato Legends</div>
               <div className="text-xs font-bold text-[#e3e2e3] font-mono">31%</div>
             </div>
             <div className="bg-[#1f2021] p-1.5 rounded-lg border border-[#292a2b]">
-              <div className="text-[10px] text-[#a08e7a]">Direct App</div>
+              <div className="text-[10px] text-[#a08e7a]">Direct Concierge</div>
               <div className="text-xs font-bold text-[#ffc174] font-mono">15%</div>
             </div>
           </div>
@@ -288,7 +288,7 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
           </div>
           <div className="mt-2.5 flex items-baseline gap-1.5">
             <span className="font-headline font-bold text-2xl sm:text-3xl text-[#ffc174] tracking-tight font-mono">
-              $89.50
+              ₹8,950
             </span>
             <span className="text-xs text-[#a08e7a]">/ cover</span>
           </div>
@@ -397,7 +397,7 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
 
                   <div className="mt-3.5 flex items-baseline justify-between">
                     <span className="font-headline font-bold text-xl text-[#ffc174] font-mono">
-                      ${loc.revenueToday.toLocaleString()}
+                      ₹{loc.revenueToday.toLocaleString('en-IN')}
                     </span>
                     <span className="text-xs text-[#d8c3ad] font-mono">
                       {loc.ordersPerHour} orders/hr
@@ -668,7 +668,7 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
 
                 <div className="text-right shrink-0">
                   <div className="text-sm font-bold text-[#ffc174] font-mono">
-                    ${ord.totalAmount}
+                    ₹{ord.totalAmount.toLocaleString('en-IN')}
                   </div>
                   <span
                     className={`text-[10px] font-semibold ${
@@ -718,11 +718,11 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
           <div className="p-4 rounded-xl bg-[#1f2021] border border-[#292a2b] flex flex-col justify-between space-y-3 hover:border-[#ffc174]/40 transition-all">
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-[#e3e2e3]">Global Catalog Sync</span>
+                <span className="text-sm font-bold text-[#e3e2e3]">National Catalog Sync</span>
                 <span className="material-symbols-outlined text-[#ffc174] text-lg">sync_saved_locally</span>
               </div>
               <p className="text-xs text-[#d8c3ad] leading-relaxed">
-                Broadcast revised prices, vintage allocation locks, and sold-out 86-item exclusions across POS terminals & aggregators.
+                Broadcast revised INR prices, vintage allocation locks, and sold-out 86-item exclusions across POS terminals & Swiggy/Zomato.
               </p>
             </div>
             <button
@@ -734,7 +734,7 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
               <span className={`material-symbols-outlined text-base ${isSyncing ? 'animate-spin' : ''}`}>
                 cloud_sync
               </span>
-              <span>{isSyncing ? 'Syncing 6 Nodes...' : 'Deploy Menu Push (6 Nodes)'}</span>
+              <span>{isSyncing ? 'Syncing 6 Nodes...' : 'Deploy Menu Push (6 Metros)'}</span>
             </button>
           </div>
 
@@ -813,7 +813,7 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
               <div className="p-3 bg-[#1f2021] border border-[#292a2b] rounded-xl text-center">
                 <div className="text-[10px] text-[#a08e7a] uppercase font-bold">Gross Today</div>
                 <div className="text-base font-bold text-[#ffc174] mt-1 font-mono">
-                  ${selectedBranchForModal.revenueToday.toLocaleString()}
+                  ₹{selectedBranchForModal.revenueToday.toLocaleString('en-IN')}
                 </div>
               </div>
               <div className="p-3 bg-[#1f2021] border border-[#292a2b] rounded-xl text-center">
@@ -840,13 +840,13 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
                   onClick={() => {
                     onShowToast(
                       'Priority Protocol Engaged',
-                      `All new high-value VIP arrivals for ${selectedBranchForModal.name} routed to Private Tatami Suite.`
+                      `All new high-value VIP arrivals for ${selectedBranchForModal.name} routed to VIP Durbar Suite.`
                     );
                     setSelectedBranchForModal(null);
                   }}
                   className="w-full py-2.5 px-3.5 rounded-xl bg-[#1f2021] hover:bg-[#292a2b] text-[#e3e2e3] text-left text-xs font-medium flex items-center justify-between transition-colors border border-[#292a2b]"
                 >
-                  <span>Route All New VIPs to Private Tatami Suite</span>
+                  <span>Route All New VIPs to VIP Durbar Suite</span>
                   <span className="material-symbols-outlined text-sm text-[#ffc174]">
                     chevron_right
                   </span>

@@ -16,9 +16,9 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newDept, setNewDept] = useState('Executive & Kitchen');
-  const [newOutpost, setNewOutpost] = useState('Tokyo Roppongi');
+  const [newOutpost, setNewOutpost] = useState('Mumbai BKC Flagship');
   const [newShift, setNewShift] = useState('Dinner Service Split Shift');
-  const [newSalary, setNewSalary] = useState('Tier 2 ($60,000 - $85,000)');
+  const [newSalary, setNewSalary] = useState('₹12,00,000 - ₹16,00,000 / yr');
 
   // Filter staff rows
   const filteredStaff = staffList.filter((s) => {
@@ -38,12 +38,12 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
           ? {
               ...s,
               status: 'settled',
-              statusText: 'Settled (Cleared)',
+              statusText: 'Settled (NEFT Transfer)',
             }
           : s
       )
     );
-    onShowToast('Payroll Settled', `Direct deposit authorization executed for ${name}.`);
+    onShowToast('Payroll Settled', `Direct NEFT transfer authorization executed for ${name}.`);
   };
 
   const handleVerifySingle = (id: string, name: string) => {
@@ -63,9 +63,9 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
 
   const handleSettleAllApproved = () => {
     setStaffList((prev) =>
-      prev.map((s) => (s.status === 'approved' ? { ...s, status: 'settled', statusText: 'Settled' } : s))
+      prev.map((s) => (s.status === 'approved' ? { ...s, status: 'settled', statusText: 'Settled (NEFT Batch)' } : s))
     );
-    onShowToast('Batch Wire Clearance Executed', 'Dispatched $324,000 across corporate SWIFT & Stripe Treasury nodes.');
+    onShowToast('Batch NEFT Wire Clearance Executed', 'Dispatched ₹32,40,000 across HDFC & ICICI Corporate Treasury nodes.');
   };
 
   const handleCreateRequisition = (e: React.FormEvent) => {
@@ -74,7 +74,7 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
       id: `req-${Date.now()}`,
       title: newTitle,
       outpost: newOutpost,
-      description: `${newDept} • ${newShift}. Competitive benefits and guild pooling.`,
+      description: `${newDept} • ${newShift}. Competitive luxury hotel benefits and guild pooling.`,
       salaryBand: newSalary,
       stage: '0 in Review',
       badge: 'Screening Stage',
@@ -82,17 +82,16 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
       applicantsCount: 1,
       subMetric: 'Just Posted',
       progressStep: 1,
-      leadEvaluator: 'Chef Kenjiro Vance',
+      leadEvaluator: 'Chef Sanjeev Mehra',
     };
     setRequisitions([newReq, ...requisitions]);
     setIsModalOpen(false);
     setNewTitle('');
-    onShowToast('Job Requisition Published', `Routing "${newTitle}" across international culinary guilds.`);
+    onShowToast('Job Requisition Published', `Routing "${newTitle}" across national culinary institutes and guilds.`);
   };
 
   return (
     <div className="flex flex-col w-full space-y-8 relative">
-      {/* Top Ambient Glow Gradient Layer */}
       <div className="absolute -top-10 left-1/4 w-96 h-96 bg-[#ffc174]/10 rounded-full blur-3xl pointer-events-none -z-10" />
       <div className="absolute -top-12 right-10 w-80 h-80 bg-[#56e5a9]/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
@@ -101,18 +100,18 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[10px] text-[#ffc174] uppercase tracking-widest bg-[#f59e0b]/15 px-2.5 py-0.5 rounded-full border border-[#f59e0b]/30 font-bold">
-              Global Human Capital
+              National Human Capital
             </span>
             <span className="text-[#a08e7a] text-xs">/</span>
             <span className="text-[10px] text-[#56e5a9] uppercase tracking-wider font-bold">
-              Settlement Cycle 04-B
+              Settlement Cycle 04-B (INR)
             </span>
           </div>
           <h1 className="font-headline font-bold text-2xl sm:text-3xl text-[#e3e2e3] tracking-tight">
             Staff Ecosystem, Payroll Settlement & Talent Acquisition
           </h1>
           <p className="text-xs sm:text-sm text-[#d8c3ad] max-w-3xl leading-relaxed">
-            Unified treasury, tip-pooling matrix, and real-time culinary guild recruitment across Tokyo, New York, London, and Dubai outposts.
+            Unified treasury, tip-pooling matrix, and real-time culinary guild recruitment across Mumbai, Delhi, Bengaluru, and Hyderabad outposts.
           </p>
         </div>
 
@@ -160,9 +159,9 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
             </span>
           </div>
           <div className="mt-3 flex items-center justify-between text-xs text-[#d8c3ad] pt-2 border-t border-[#292a2b]">
-            <span>Active in 4 Outposts</span>
+            <span>Active in 6 Metros</span>
             <span className="text-[10px] text-[#a08e7a] font-bold uppercase tracking-wider">
-              Tokyo • SoHo • Mayfair • Marina
+              Mumbai • Delhi • BLR • HYD
             </span>
           </div>
         </div>
@@ -177,9 +176,9 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
           </div>
           <div className="mt-3 flex items-baseline gap-1.5">
             <span className="font-headline font-bold text-3xl text-[#e3e2e3] leading-none font-mono">
-              $418,200
+              ₹41,82,000
             </span>
-            <span className="text-xs text-[#a08e7a]">USD</span>
+            <span className="text-xs text-[#a08e7a]">INR</span>
           </div>
           <div className="mt-3 space-y-1.5">
             <div className="w-full bg-[#343536] rounded-full h-2 overflow-hidden flex">
@@ -187,8 +186,8 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
               <div className="bg-[#f59e0b] h-full rounded-full" style={{ width: '22.6%' }} />
             </div>
             <div className="flex items-center justify-between text-[11px] font-mono">
-              <span className="text-[#56e5a9]">Settled: $324,000</span>
-              <span className="text-[#ffc174] font-semibold">Pending: $94,200</span>
+              <span className="text-[#56e5a9]">Settled: ₹32,40,000</span>
+              <span className="text-[#ffc174] font-semibold">Pending: ₹9,42,000</span>
             </div>
           </div>
         </div>
@@ -203,7 +202,7 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
           </div>
           <div className="mt-3 flex items-baseline gap-2">
             <span className="font-headline font-bold text-3xl text-[#e3e2e3] leading-none font-mono">
-              $1,420
+              ₹14,200
             </span>
             <span className="text-xs text-[#56e5a9] font-semibold flex items-center font-mono">
               <span className="material-symbols-outlined text-sm">trending_up</span>+12% vs L/M
@@ -251,7 +250,7 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
                 Staff Ledger & Settlement Clearance
               </h2>
               <p className="text-xs text-[#d8c3ad]">
-                Live audit ledger of base compensations, service charges, overtime hours, and dual-authorization payouts.
+                Live audit ledger of base compensations, service charges, festival bonuses, and dual-authorization payouts in Indian Rupees.
               </p>
             </div>
           </div>
@@ -266,20 +265,20 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
               <span>Settle All Approved (142 Staff)</span>
             </button>
             <button
-              onClick={() => onShowToast('Bank Batch Wire Generated', 'Formatted MT103 / ISO 20022 wire file ready for banking transmission.')}
+              onClick={() => onShowToast('Bank Batch Wire Generated', 'Formatted RTGS / NEFT corporate payment file generated for banking transmission.')}
               type="button"
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#292a2b] hover:bg-[#343536] text-[#e3e2e3] text-xs font-semibold border border-[#343536] transition-colors cursor-pointer"
             >
               <span className="material-symbols-outlined text-base text-[#a08e7a]">file_download</span>
-              <span>Export Bank Batch Wire File</span>
+              <span>Export NEFT Batch File</span>
             </button>
             <button
-              onClick={() => onShowToast('Paystubs Generated', '248 encrypted digital paystubs dispatched to employee mobile portals.')}
+              onClick={() => onShowToast('Digital Salary Slips Dispatched', '248 Form 16 compliant digital paystubs dispatched to employee WhatsApp/email.')}
               type="button"
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-[#292a2b] hover:bg-[#343536] text-[#e3e2e3] text-xs font-semibold border border-[#343536] transition-colors cursor-pointer"
             >
               <span className="material-symbols-outlined text-base text-[#a08e7a]">receipt_long</span>
-              <span>Generate Paystubs</span>
+              <span>Generate Paystubs (Form 16)</span>
             </button>
           </div>
         </div>
@@ -299,7 +298,7 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
 
           <div className="flex items-center gap-4 text-[11px] text-[#a08e7a]">
             <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#56e5a9]" /> Direct Wire Ready
+              <span className="w-2 h-2 rounded-full bg-[#56e5a9]" /> Direct NEFT Ready
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#f59e0b]" /> Pending Sign-off
@@ -353,18 +352,18 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
                     </span>
                   </td>
                   <td className="py-4 px-4 font-mono text-[#e3e2e3] font-semibold text-sm">
-                    ${staff.baseRetainer.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    ₹{staff.baseRetainer.toLocaleString('en-IN')}
                   </td>
                   <td className="py-4 px-4">
                     <div className="flex flex-col font-mono">
                       <span className="text-[#56e5a9] font-semibold">
-                        +${staff.extraAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                        +₹{staff.extraAmount.toLocaleString('en-IN')}
                       </span>
                       <span className="text-[10px] text-[#a08e7a] font-sans">{staff.extraLabel}</span>
                     </div>
                   </td>
                   <td className="py-4 px-4 font-mono font-bold text-sm text-[#e3e2e3]">
-                    ${staff.netPayable.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    ₹{staff.netPayable.toLocaleString('en-IN')}
                   </td>
                   <td className="py-4 px-4">
                     <span
@@ -408,10 +407,10 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
                     ) : (
                       <button
                         type="button"
-                        onClick={() => onShowToast('Wire Receipt #882', `Retrieved cryptographic SWIFT confirmation for ${staff.name}.`)}
+                        onClick={() => onShowToast('UTR Number #IN882', `Retrieved RTGS confirmation UTR for ${staff.name}.`)}
                         className="px-3 py-1.5 rounded-lg bg-[#1f2021] text-[#a08e7a] hover:text-[#e3e2e3] text-xs font-mono border border-[#292a2b] transition-colors cursor-pointer"
                       >
-                        Receipt #{Math.floor(100 + Math.random() * 899)}
+                        UTR #{Math.floor(100000 + Math.random() * 899999)}
                       </button>
                     )}
                   </td>
@@ -424,9 +423,9 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
         {/* Table Footer */}
         <div className="p-4 bg-[#0d0e0f]/90 border-t border-[#292a2b] flex flex-wrap items-center justify-between text-xs text-[#a08e7a]">
           <div className="flex items-center gap-2">
-            <span>Showing {filteredStaff.length} of 248 staff entries</span>
+            <span>Showing {filteredStaff.length} of 248 staff entries across Indian outposts</span>
             <span>•</span>
-            <span className="text-[#56e5a9] font-medium">Auto-synced with SWIFT and Stripe Treasury</span>
+            <span className="text-[#56e5a9] font-medium">Auto-synced with RBI RTGS & Corporate Treasury</span>
           </div>
           <div className="flex items-center gap-1">
             <button className="px-2.5 py-1 rounded bg-[#292a2b] text-[#e3e2e3] hover:bg-[#343536]" type="button">
@@ -453,7 +452,7 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-[#cc003c]" />
               <span className="text-[10px] font-bold uppercase tracking-widest text-[#a08e7a]">
-                Recruitment Pipeline
+                National Talent Pipeline
               </span>
             </div>
             <h2 className="font-headline font-bold text-base sm:text-lg text-[#e3e2e3]">
@@ -497,7 +496,6 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
                   <span>{req.applicantsCount} Applicants</span>
                   <span className="text-[#56e5a9] font-semibold">{req.subMetric}</span>
                 </div>
-                {/* 4-Step progress bar */}
                 <div className="grid grid-cols-4 gap-1.5 h-1.5">
                   {[1, 2, 3, 4].map((step) => (
                     <div
@@ -544,7 +542,7 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
             </div>
 
             <p className="text-xs text-[#d8c3ad]">
-              Define role parameters, branch allocation, pay scale tier, and operational shift cadence.
+              Define role parameters, metro outpost allocation, CTC pay scale tier in INR, and operational shift cadence.
             </p>
 
             <form onSubmit={handleCreateRequisition} className="space-y-4">
@@ -555,7 +553,7 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Master Teppan Artisan / Senior Captain"
+                  placeholder="e.g. Master Tandoor Ustad / Royal Captain"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   className="w-full bg-[#292a2b] text-[#e3e2e3] px-3.5 py-2 rounded-lg text-xs border border-[#343536] focus:outline-none focus:ring-1 focus:ring-[#ffc174]"
@@ -581,18 +579,19 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
 
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-[#a08e7a] mb-1">
-                    Target Outpost
+                    Target Metro Outpost
                   </label>
                   <select
                     value={newOutpost}
                     onChange={(e) => setNewOutpost(e.target.value)}
                     className="w-full bg-[#292a2b] text-[#e3e2e3] px-3.5 py-2 rounded-lg text-xs border border-[#343536] focus:outline-none focus:ring-1 focus:ring-[#ffc174]"
                   >
-                    <option value="Tokyo Roppongi">Tokyo Roppongi</option>
-                    <option value="New York SoHo">New York SoHo</option>
-                    <option value="London Mayfair">London Mayfair</option>
-                    <option value="Dubai Marina">Dubai Marina</option>
-                    <option value="Paris Le Marais">Paris Le Marais</option>
+                    <option value="Mumbai BKC Flagship">Mumbai BKC Flagship</option>
+                    <option value="New Delhi Lutyens">New Delhi Lutyens</option>
+                    <option value="Bengaluru Indiranagar">Bengaluru Indiranagar</option>
+                    <option value="Hyderabad Jubilee Hills">Hyderabad Jubilee Hills</option>
+                    <option value="Kolkata Park Street">Kolkata Park Street</option>
+                    <option value="Chennai Nungambakkam">Chennai Nungambakkam</option>
                   </select>
                 </div>
               </div>
@@ -608,7 +607,7 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
                     className="w-full bg-[#292a2b] text-[#e3e2e3] px-3.5 py-2 rounded-lg text-xs border border-[#343536] focus:outline-none focus:ring-1 focus:ring-[#ffc174]"
                   >
                     <option value="Dinner Service Split Shift">Dinner Split Shift (16:00 - Close)</option>
-                    <option value="Day Prep & Bakery Turnaround">Day Prep & Bakery (06:00 - 15:00)</option>
+                    <option value="Day Halwai & Marination Turnaround">Day Halwai & Prep (06:00 - 15:00)</option>
                     <option value="Full Service Variable Rotation">Full Service Variable Rotation</option>
                     <option value="Night Closing Sanitation">Night Closing (22:00 - 05:00)</option>
                   </select>
@@ -616,17 +615,17 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
 
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-wider text-[#a08e7a] mb-1">
-                    Target Salary Band
+                    Target CTC Band (INR)
                   </label>
                   <select
                     value={newSalary}
                     onChange={(e) => setNewSalary(e.target.value)}
                     className="w-full bg-[#292a2b] text-[#e3e2e3] px-3.5 py-2 rounded-lg text-xs border border-[#343536] focus:outline-none focus:ring-1 focus:ring-[#ffc174]"
                   >
-                    <option value="Tier 1 ($45,000 - $60,000)">Tier 1 ($45k - $60k + Gratuity)</option>
-                    <option value="Tier 2 ($60,000 - $85,000)">Tier 2 ($60k - $85k + Pool)</option>
-                    <option value="Executive ($90,000 - $140,000)">Executive Tier ($90k - $140k)</option>
-                    <option value="Hourly Apprenticeship">Hourly Guild Stagiaire</option>
+                    <option value="₹6,00,000 - ₹9,00,000 / yr">Tier 1 (₹6L - ₹9L + Gratuity)</option>
+                    <option value="₹9,00,000 - ₹14,00,000 / yr">Tier 2 (₹9L - ₹14L + Pool)</option>
+                    <option value="₹16,00,000 - ₹24,00,000 / yr">Executive Tier (₹16L - ₹24L)</option>
+                    <option value="Hourly Guild Apprentice">Hotel School Stagiaire</option>
                   </select>
                 </div>
               </div>

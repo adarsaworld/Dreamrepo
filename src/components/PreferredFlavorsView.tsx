@@ -34,12 +34,13 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
   }, []);
 
   const locationButtons = [
-    { id: 'all', label: 'All Outposts (6)' },
-    { id: 'tokyo', label: 'Tokyo Roppongi' },
-    { id: 'nyc', label: 'NYC SoHo' },
-    { id: 'london', label: 'London Mayfair' },
-    { id: 'dubai', label: 'Dubai Marina' },
-    { id: 'paris', label: 'Paris Le Marais' },
+    { id: 'all', label: 'All Metros (6)' },
+    { id: 'mumbai', label: 'Mumbai BKC' },
+    { id: 'delhi', label: 'New Delhi CP' },
+    { id: 'bengaluru', label: 'Bengaluru Indiranagar' },
+    { id: 'hyderabad', label: 'Hyderabad Jubilee' },
+    { id: 'kolkata', label: 'Kolkata Park St' },
+    { id: 'chennai', label: 'Chennai Nungambakkam' },
   ];
 
   return (
@@ -53,14 +54,14 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                 insights
               </span>
               <span className="text-[11px] uppercase tracking-widest font-bold">
-                Intelligence Stream // Gastronomic Demand
+                Intelligence Stream // Indian Gastronomic Demand
               </span>
             </div>
             <h1 className="font-headline font-bold text-2xl sm:text-3xl text-[#e3e2e3] tracking-tight">
               Preferred Flavors & Dining Behavior Analytics
             </h1>
             <p className="text-xs sm:text-sm text-[#d8c3ad] max-w-3xl leading-relaxed">
-              Aggregated palate telemetry across 6 global metropolitan outposts. Correlating culinary flavor signatures with guest re-order propensity, channel economics, and seasonal palate surges.
+              Aggregated palate telemetry across 6 premier Indian metropolitan outposts. Correlating royal Awadhi, coastal Malabar, and Kashmiri flavor signatures with guest re-order propensity, channel economics, and seasonal festival surges.
             </p>
           </div>
 
@@ -69,7 +70,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
             <button
               onClick={() => {
                 setActiveChannel('omni');
-                onShowToast('Omnichannel Scope', 'Displaying blended dine-in, web portal, and delivery telemetry.');
+                onShowToast('Omnichannel Scope', 'Displaying blended dine-in, royal banqueting, and delivery telemetry.');
               }}
               className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeChannel === 'omni'
@@ -83,7 +84,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
             <button
               onClick={() => {
                 setActiveChannel('dinein');
-                onShowToast('Dine-In Scope', 'Filtering for table-side orders and tasting courses.');
+                onShowToast('Dine-In Scope', 'Filtering for Royal Durbar table-side and tasting courses.');
               }}
               className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeChannel === 'dinein'
@@ -97,7 +98,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
             <button
               onClick={() => {
                 setActiveChannel('delivery');
-                onShowToast('Delivery Scope', 'Filtering for Deliverect, UberEats Priority, and direct app.');
+                onShowToast('Delivery Scope', 'Filtering for Swiggy Gourmet, Zomato Legends, and Concierge app.');
               }}
               className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeChannel === 'delivery'
@@ -115,14 +116,14 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
         <div className="flex items-center justify-between flex-wrap gap-3 p-2.5 rounded-xl bg-[#1b1c1d] border border-[#292a2b] shadow-sm">
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
             <span className="text-[10px] uppercase font-bold tracking-wider text-[#a08e7a] px-2 hidden sm:inline-block">
-              Location Filter:
+              Metro Filter:
             </span>
             {locationButtons.map((btn) => (
               <button
                 key={btn.id}
                 onClick={() => {
                   setActiveLocationFilter(btn.id);
-                  onShowToast('Filter Applied', `Viewing culinary metrics for ${btn.label}.`);
+                  onShowToast('Metro Filter Applied', `Viewing culinary metrics for ${btn.label}.`);
                 }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
                   activeLocationFilter === btn.id
@@ -164,11 +165,11 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   </span>
                 </div>
                 <h2 className="font-headline font-bold text-lg sm:text-xl text-[#e3e2e3]">
-                  Most Demanded Profile: Umami Wood-Fired Wagyu & Truffle Infusions
+                  Most Demanded Profile: Smoky Tandoor-Charred Truffle & Slow-Braised Nihari Reductions
                 </h2>
                 <p className="text-xs sm:text-sm text-[#d8c3ad]">
                   Accounts for{' '}
-                  <span className="text-[#ffc174] font-semibold">34% of syndicate aggregate order volume</span> with 89.2% repeat ordering cadence across premier evening shifts.
+                  <span className="text-[#ffc174] font-semibold">34% of syndicate aggregate order volume</span> with 89.2% repeat ordering cadence across premier evening dinner seatings.
                 </p>
               </div>
             </div>
@@ -188,7 +189,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   Avg Ticket Boost
                 </span>
                 <span className="font-headline font-bold text-xl sm:text-2xl text-[#e3e2e3] font-mono">
-                  +$42.50
+                  +₹1,850
                 </span>
               </div>
             </div>
@@ -204,13 +205,13 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               Customer Most Preferred Dishes Leaderboard
             </h2>
             <p className="text-xs text-[#d8c3ad]">
-              Live volume ordering rank, channel yield margins, and taste profile attribution.
+              Live volume ordering rank across Indian metros, channel yield margins, and taste profile attribution.
             </p>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-[#d8c3ad]">
             <span>Sort By:</span>
             <button
-              onClick={() => onShowToast('Sorted by Velocity', 'Ordering data ordered by daily ticket frequency.')}
+              onClick={() => onShowToast('Sorted by Velocity', 'Ordering data ordered by daily ticket frequency in Indian metros.')}
               className="px-2.5 py-1 rounded bg-[#292a2b] text-[#ffc174] font-semibold border border-[#343536] cursor-pointer"
               type="button"
             >
@@ -223,7 +224,6 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
           {/* Dish #1 Hero Card */}
           <div className="lg:col-span-7 rounded-xl bg-[#1f2021] border border-[#292a2b] p-6 shadow-xl relative overflow-hidden flex flex-col justify-between group">
-            {/* Background dish visual with gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0d0e0f] via-[#1f2021]/80 to-transparent z-10 pointer-events-none" />
             <div
               className="absolute top-0 right-0 w-3/5 h-full opacity-40 group-hover:opacity-55 transition-opacity duration-700 bg-cover bg-center"
@@ -237,10 +237,10 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-1 rounded-md bg-[#f59e0b] text-[#472a00] text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                    Rank #1 Global
+                    Rank #1 National
                   </span>
                   <span className="px-2.5 py-1 rounded-md bg-[#343536]/80 backdrop-blur-sm text-[#ffc174] text-[10px] font-semibold border border-[#ffc174]/20">
-                    Dine-in Signature
+                    Awadhi Signature
                   </span>
                 </div>
                 <div className="flex items-center gap-1 text-[#ffc174]">
@@ -254,20 +254,20 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
 
               <div className="pt-6">
                 <h3 className="font-headline font-bold text-xl sm:text-2xl text-[#e3e2e3] tracking-tight">
-                  A5 Miyazaki Wagyu Ribeye
+                  Truffle Galouti Tartlet & 24K Gold Vark
                 </h3>
                 <p className="text-sm text-[#ffc174] font-semibold mt-1">
-                  with 30-Year Aged Black Truffle Tare
+                  with 30-Year Aged Black Truffle Nihari & Saffron Sheermal
                 </p>
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   <span className="px-2 py-0.5 rounded bg-[#39393a]/80 text-[10px] text-[#e3e2e3] font-medium border border-[#534434]">
-                    Umami Depth
+                    Awadhi Dum Pukht
                   </span>
                   <span className="px-2 py-0.5 rounded bg-[#39393a]/80 text-[10px] text-[#e3e2e3] font-medium border border-[#534434]">
-                    Wood-Fired Smoke
+                    Binchotan Smoked
                   </span>
                   <span className="px-2 py-0.5 rounded bg-[#39393a]/80 text-[10px] text-[#e3e2e3] font-medium border border-[#534434]">
-                    Earthy Truffle
+                    Kashmiri Saffron
                   </span>
                 </div>
               </div>
@@ -283,13 +283,13 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               <div>
                 <span className="text-[10px] text-[#a08e7a] uppercase font-bold block">Unit Price</span>
                 <span className="font-headline font-bold text-base sm:text-lg text-[#e3e2e3] font-mono">
-                  $128<span className="text-xs text-[#a08e7a] font-normal">.00</span>
+                  ₹4,850<span className="text-xs text-[#a08e7a] font-normal">.00</span>
                 </span>
               </div>
               <div>
                 <span className="text-[10px] text-[#a08e7a] uppercase font-bold block">Margin Yield</span>
                 <span className="font-headline font-bold text-base sm:text-lg text-[#56e5a9] font-mono">
-                  68%
+                  74%
                 </span>
               </div>
               <div>
@@ -316,7 +316,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-1 rounded-md bg-[#39393a] text-[#ffc174] text-[10px] font-bold uppercase tracking-wider border border-[#ffc174]/30">
-                    Rank #2 Global
+                    Rank #2 National
                   </span>
                   <span className="px-2.5 py-1 rounded-md bg-[#cc003c] text-white text-[10px] font-bold flex items-center gap-1">
                     <span className="material-symbols-outlined text-[12px]">bolt</span>
@@ -333,20 +333,20 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
 
               <div className="pt-5">
                 <h3 className="font-headline font-bold text-xl sm:text-2xl text-[#e3e2e3] tracking-tight">
-                  Truffle Lobster Sando
+                  Tandoori Truffle Lobster on Bun Maska
                 </h3>
                 <p className="text-sm text-[#ffc174] font-semibold mt-1">
-                  Oscietra Caviar Butter on Hokkaido Shokupan
+                  Tellicherry Pepper Butter on Toasted Irani Bun Maska
                 </p>
                 <div className="flex flex-wrap gap-1.5 mt-3">
                   <span className="px-2 py-0.5 rounded bg-[#39393a]/80 text-[10px] text-[#e3e2e3] font-medium border border-[#534434]">
-                    Rich Butter
+                    Bay of Bengal
                   </span>
                   <span className="px-2 py-0.5 rounded bg-[#39393a]/80 text-[10px] text-[#e3e2e3] font-medium border border-[#534434]">
-                    Ocean Brine
+                    Curry Leaf Emulsion
                   </span>
                   <span className="px-2 py-0.5 rounded bg-[#39393a]/80 text-[10px] text-[#e3e2e3] font-medium border border-[#534434]">
-                    Sweet Crustacean
+                    Coastal Spiced
                   </span>
                 </div>
               </div>
@@ -362,13 +362,13 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               <div>
                 <span className="text-[10px] text-[#a08e7a] uppercase font-bold block">Unit Price</span>
                 <span className="font-headline font-bold text-base sm:text-lg text-[#e3e2e3] font-mono">
-                  $64<span className="text-xs text-[#a08e7a] font-normal">.00</span>
+                  ₹3,200<span className="text-xs text-[#a08e7a] font-normal">.00</span>
                 </span>
               </div>
               <div>
                 <span className="text-[10px] text-[#a08e7a] uppercase font-bold block">Margin Yield</span>
                 <span className="font-headline font-bold text-base sm:text-lg text-[#56e5a9] font-mono">
-                  72%
+                  74%
                 </span>
               </div>
               <div>
@@ -388,7 +388,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               Subsequent Flavor Leaders (#3 - #5)
             </span>
             <span className="text-[10px] text-[#a08e7a] uppercase tracking-wider font-semibold font-mono">
-              Metrics normalized across 24h cycle
+              Metrics normalized across 24h metro cycle
             </span>
           </div>
 
@@ -415,10 +415,10 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                       </span>
                       <div>
                         <span className="font-semibold text-sm text-[#e3e2e3] block">
-                          Charred Miso Sea Bass & Yuzu Emulsion
+                          Charred Kashmiri Morel Khichdi Arancini
                         </span>
                         <span className="text-[11px] text-[#d8c3ad]">
-                          Sustainably sourced Chilean Sea Bass marinated for 72 hrs
+                          Wild Guchhi mushrooms from Anantnag, 24-month aged Rajasthani cheese
                         </span>
                       </div>
                     </div>
@@ -426,17 +426,17 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-1 flex-wrap">
                       <span className="px-2 py-0.5 rounded bg-[#343536] text-[#ffc174] text-[10px] font-semibold">
-                        Citrus Accent
+                        Guchhi Morel
                       </span>
                       <span className="px-2 py-0.5 rounded bg-[#343536] text-[#d8c3ad] text-[10px]">
-                        Charred Sweet
+                        Gobindobhog
                       </span>
                     </div>
                   </td>
                   <td className="py-4 px-4 text-right font-mono font-semibold text-sm">412</td>
-                  <td className="py-4 px-4 text-right font-mono font-semibold text-sm">$56.00</td>
+                  <td className="py-4 px-4 text-right font-mono font-semibold text-sm">₹2,450.00</td>
                   <td className="py-4 px-4 text-right">
-                    <span className="font-mono font-semibold text-[#56e5a9] text-sm">65%</span>
+                    <span className="font-mono font-semibold text-[#56e5a9] text-sm">72%</span>
                     <span className="block text-[10px] text-[#a08e7a]">Low waste</span>
                   </td>
                   <td className="py-4 px-4 text-center">
@@ -451,7 +451,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   <td className="py-4 px-6 text-right">
                     <div className="space-y-1">
                       <div className="flex justify-end items-center gap-2">
-                        <span className="text-xs font-semibold text-[#e3e2e3]">London Mayfair</span>
+                        <span className="text-xs font-semibold text-[#e3e2e3]">Mumbai BKC</span>
                         <span className="text-xs text-[#ffc174] font-semibold font-mono">41%</span>
                       </div>
                       <div className="w-28 ml-auto bg-[#343536] rounded-full h-1.5 overflow-hidden">
@@ -471,14 +471,14 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-semibold text-sm text-[#e3e2e3]">
-                            Smoked Duck Breast Bao
+                            Dum Pukht Smoked Duck Kakori Bao
                           </span>
                           <span className="px-2 py-0.5 rounded-full bg-[#cc003c]/20 text-[#ffb3b6] text-[10px] font-semibold">
                             Late Night Favorite
                           </span>
                         </div>
                         <span className="text-[11px] text-[#d8c3ad]">
-                          Hoisin plum reduction, pickled heirloom daikon, steam bun
+                          Slow-braised Awadhi duck, tamarind reduction, heirloom pickled daikon
                         </span>
                       </div>
                     </div>
@@ -486,15 +486,15 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-1 flex-wrap">
                       <span className="px-2 py-0.5 rounded bg-[#343536] text-[#ffc174] text-[10px] font-semibold">
-                        Smoky
+                        Kakori Spiced
                       </span>
                       <span className="px-2 py-0.5 rounded bg-[#343536] text-[#d8c3ad] text-[10px]">
-                        Sweet & Savory
+                        Sweet & Tangy
                       </span>
                     </div>
                   </td>
                   <td className="py-4 px-4 text-right font-mono font-semibold text-sm">380</td>
-                  <td className="py-4 px-4 text-right font-mono font-semibold text-sm">$28.00</td>
+                  <td className="py-4 px-4 text-right font-mono font-semibold text-sm">₹1,850.00</td>
                   <td className="py-4 px-4 text-right">
                     <span className="font-mono font-semibold text-[#56e5a9] text-sm">78%</span>
                     <span className="block text-[10px] text-[#a08e7a]">High throughput</span>
@@ -511,7 +511,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   <td className="py-4 px-6 text-right">
                     <div className="space-y-1">
                       <div className="flex justify-end items-center gap-2">
-                        <span className="text-xs font-semibold text-[#e3e2e3]">NYC SoHo</span>
+                        <span className="text-xs font-semibold text-[#e3e2e3]">New Delhi Lutyens</span>
                         <span className="text-xs text-[#ffc174] font-semibold font-mono">52%</span>
                       </div>
                       <div className="w-28 ml-auto bg-[#343536] rounded-full h-1.5 overflow-hidden">
@@ -530,10 +530,10 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                       </span>
                       <div>
                         <span className="font-semibold text-sm text-[#e3e2e3] block">
-                          Golden Matcha Lava Tart with 24k Gold Leaf
+                          Golden Saffron & Pistachio Baklava Tart with 24k Gold
                         </span>
                         <span className="text-[11px] text-[#d8c3ad]">
-                          Uji ceremonial grade matcha core with black sesame crust
+                          Pampore ceremonial saffron core with Iranian pistachio & malai rabri
                         </span>
                       </div>
                     </div>
@@ -541,18 +541,18 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-1 flex-wrap">
                       <span className="px-2 py-0.5 rounded bg-[#343536] text-[#ffc174] text-[10px] font-semibold">
-                        Earthy Bitter
+                        Kashmiri Saffron
                       </span>
                       <span className="px-2 py-0.5 rounded bg-[#343536] text-[#d8c3ad] text-[10px]">
-                        Sweet Silky
+                        Pistachio Rabri
                       </span>
                     </div>
                   </td>
                   <td className="py-4 px-4 text-right font-mono font-semibold text-sm">340</td>
-                  <td className="py-4 px-4 text-right font-mono font-semibold text-sm">$22.00</td>
+                  <td className="py-4 px-4 text-right font-mono font-semibold text-sm">₹1,450.00</td>
                   <td className="py-4 px-4 text-right">
                     <span className="font-mono font-semibold text-[#56e5a9] text-sm">81%</span>
-                    <span className="block text-[10px] text-[#a08e7a]">Pastry batching</span>
+                    <span className="block text-[10px] text-[#a08e7a]">Halwai batching</span>
                   </td>
                   <td className="py-4 px-4 text-center">
                     <div className="inline-flex items-center gap-1 text-[#ffc174]">
@@ -566,7 +566,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   <td className="py-4 px-6 text-right">
                     <div className="space-y-1">
                       <div className="flex justify-end items-center gap-2">
-                        <span className="text-xs font-semibold text-[#e3e2e3]">Tokyo Roppongi</span>
+                        <span className="text-xs font-semibold text-[#e3e2e3]">Bengaluru Indiranagar</span>
                         <span className="text-xs text-[#ffc174] font-semibold font-mono">66%</span>
                       </div>
                       <div className="w-28 ml-auto bg-[#343536] rounded-full h-1.5 overflow-hidden">
@@ -589,7 +589,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               Online Food Ordering Traffic & Delivery Conversion Funnel
             </h2>
             <p className="text-xs text-[#d8c3ad]">
-              Live telemetry from syndicate white-label web portals, mobile application, and third-party delivery aggregators.
+              Live telemetry from syndicate white-label web portals, royal concierge app, and Swiggy Gourmet / Zomato Legends.
             </p>
           </div>
           <span className="px-2.5 py-1 rounded bg-[#56e5a9]/10 text-[#56e5a9] text-xs font-semibold flex items-center gap-1.5 border border-[#56e5a9]/20">
@@ -613,7 +613,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               </span>
               <span className="text-xs text-[#56e5a9] font-semibold font-mono">+14.2%</span>
             </div>
-            <span className="text-[11px] text-[#a08e7a] block">Unique digital sessions recorded today</span>
+            <span className="text-[11px] text-[#a08e7a] block">Unique digital sessions recorded today across India</span>
           </div>
 
           <div className="rounded-xl bg-[#1f2021] border border-[#292a2b] p-4 shadow-md space-y-1">
@@ -629,7 +629,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               </span>
               <span className="text-xs text-[#56e5a9] font-semibold font-mono">+2.8%</span>
             </div>
-            <span className="text-[11px] text-[#a08e7a] block">Benchmark fine dining average: 21.5%</span>
+            <span className="text-[11px] text-[#a08e7a] block">Benchmark luxury dining average: 21.5%</span>
           </div>
 
           <div className="rounded-xl bg-[#1f2021] border border-[#292a2b] p-4 shadow-md space-y-1">
@@ -645,7 +645,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               </span>
               <span className="text-xs text-[#56e5a9] font-semibold font-mono">+4.1%</span>
             </div>
-            <span className="text-[11px] text-[#a08e7a] block">Payment authorization success rate 99.8%</span>
+            <span className="text-[11px] text-[#a08e7a] block">UPI & Card authorization success rate 99.8%</span>
           </div>
 
           <div className="rounded-xl bg-[#1f2021] border border-[#292a2b] p-4 shadow-md space-y-1">
@@ -661,7 +661,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               </span>
               <span className="text-xs text-[#d8c3ad]">mins</span>
             </div>
-            <span className="text-[11px] text-[#a08e7a] block">Ticket kitchen fire to courier dispatch</span>
+            <span className="text-[11px] text-[#a08e7a] block">KOT kitchen fire to premium chauffeur dispatch</span>
           </div>
         </div>
 
@@ -704,12 +704,10 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   </linearGradient>
                 </defs>
 
-                {/* Grid lines */}
                 <line x1="0" y1="40" x2="650" y2="40" stroke="#292a2b" strokeWidth="1" strokeDasharray="4 4" />
                 <line x1="0" y1="90" x2="650" y2="90" stroke="#292a2b" strokeWidth="1" strokeDasharray="4 4" />
                 <line x1="0" y1="140" x2="650" y2="140" stroke="#292a2b" strokeWidth="1" strokeDasharray="4 4" />
 
-                {/* Baseline path */}
                 <path
                   d="M 0,170 Q 70,165 130,120 T 260,140 T 390,70 T 520,35 T 650,110 L 650,200 L 0,200 Z"
                   fill="url(#baselineGlow2)"
@@ -721,7 +719,6 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   strokeWidth="2"
                 />
 
-                {/* Active curve path */}
                 <path
                   d="M 0,175 Q 60,170 120,95 T 230,125 T 380,45 T 510,18 T 650,85 L 650,200 L 0,200 Z"
                   fill="url(#curveGlow2)"
@@ -734,16 +731,13 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                   strokeLinecap="round"
                 />
 
-                {/* Lunch Apex Annotation Circle */}
                 <circle cx="120" cy="95" r="5" fill="#f59e0b" className="animate-pulse" />
                 <circle cx="120" cy="95" r="9" fill="none" stroke="#f59e0b" strokeWidth="1.5" />
 
-                {/* Dinner Surge Annotation Circle */}
                 <circle cx="510" cy="18" r="6" fill="#ffc174" className="animate-pulse" />
                 <circle cx="510" cy="18" r="11" fill="none" stroke="#ffc174" strokeWidth="1.5" />
               </svg>
 
-              {/* Floating badges over chart */}
               <div className="absolute left-[16%] top-[34%] -translate-x-1/2 p-2 rounded-lg bg-[#292a2b]/95 border border-[#ffc174]/40 backdrop-blur-md shadow-xl pointer-events-none">
                 <span className="text-[10px] text-[#e3e2e3] font-bold block leading-tight">
                   Lunch Apex
@@ -763,7 +757,6 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               </div>
             </div>
 
-            {/* Timestamps */}
             <div className="flex justify-between w-full text-[#a08e7a] text-[10px] font-mono px-2 pt-2 border-t border-[#343536]/40">
               <span>11:00 AM</span>
               <span>1:00 PM</span>
@@ -779,7 +772,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#ffc174] text-lg">rainy</span>
                 <span>
-                  <strong className="text-[#e3e2e3]">Weather Impact Factor:</strong> Heavy precipitation in London & NYC shifted +38% orders into private delivery channels during 6PM-8PM.
+                  <strong className="text-[#e3e2e3]">Monsoon Impact Factor:</strong> Heavy precipitation in Mumbai & Delhi shifted +38% orders into private delivery channels during 6PM-8PM.
                 </span>
               </div>
               <span className="text-[10px] text-[#ffc174] font-bold shrink-0 uppercase tracking-wider bg-[#f59e0b]/15 px-2 py-0.5 rounded border border-[#f59e0b]/30">
@@ -801,14 +794,14 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
 
             {/* Platform Bars */}
             <div className="space-y-3">
-              {/* Direct Kizen App */}
+              {/* Direct Kizen Concierge */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-[#e3e2e3] font-semibold flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-[#ffc174]" /> Direct Kizen App & Web
+                    <span className="h-2 w-2 rounded-full bg-[#ffc174]" /> Direct Kizen Concierge App
                   </span>
                   <span className="text-[#ffc174] font-bold font-mono">
-                    45% <span className="text-[#a08e7a] font-normal">($128 avg)</span>
+                    45% <span className="text-[#a08e7a] font-normal">(₹4,850 avg)</span>
                   </span>
                 </div>
                 <div className="w-full bg-[#343536] rounded-full h-2 overflow-hidden">
@@ -819,32 +812,32 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                 </span>
               </div>
 
-              {/* UberEats Priority */}
+              {/* Swiggy Gourmet */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-[#e3e2e3] font-semibold flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-[#56e5a9]" /> UberEats Priority
+                    <span className="h-2 w-2 rounded-full bg-[#56e5a9]" /> Swiggy Gourmet Priority
                   </span>
                   <span className="text-[#e3e2e3] font-semibold font-mono">
-                    28% <span className="text-[#a08e7a] font-normal">($94 avg)</span>
+                    28% <span className="text-[#a08e7a] font-normal">(₹3,400 avg)</span>
                   </span>
                 </div>
                 <div className="w-full bg-[#343536] rounded-full h-2 overflow-hidden">
                   <div className="bg-[#56e5a9] h-full rounded-full" style={{ width: '28%' }} />
                 </div>
                 <span className="text-[10px] text-[#a08e7a] block">
-                  Exclusive high-tier restaurant badge
+                  Exclusive Michelin-tier restaurant badge
                 </span>
               </div>
 
-              {/* DoorDash Caviar */}
+              {/* Zomato Legends */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-[#e3e2e3] font-semibold flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-[#ffb3b6]" /> DoorDash Caviar / Pass
+                    <span className="h-2 w-2 rounded-full bg-[#ffb3b6]" /> Zomato Legends / Gold
                   </span>
                   <span className="text-[#e3e2e3] font-semibold font-mono">
-                    18% <span className="text-[#a08e7a] font-normal">($88 avg)</span>
+                    18% <span className="text-[#a08e7a] font-normal">(₹2,950 avg)</span>
                   </span>
                 </div>
                 <div className="w-full bg-[#343536] rounded-full h-2 overflow-hidden">
@@ -852,14 +845,14 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                 </div>
               </div>
 
-              {/* Deliveroo */}
+              {/* DotPe */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-[#e3e2e3] font-semibold flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-[#a08e7a]" /> Deliveroo Signature
+                    <span className="h-2 w-2 rounded-full bg-[#a08e7a]" /> DotPe Luxury Delivery
                   </span>
                   <span className="text-[#e3e2e3] font-semibold font-mono">
-                    9% <span className="text-[#a08e7a] font-normal">($102 avg)</span>
+                    9% <span className="text-[#a08e7a] font-normal">(₹3,600 avg)</span>
                   </span>
                 </div>
                 <div className="w-full bg-[#343536] rounded-full h-2 overflow-hidden">
@@ -919,7 +912,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                 <span className="material-symbols-outlined text-[#ffc174] text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
                   thumb_up
                 </span>
-                <span className="text-xs font-semibold text-[#e3e2e3]">"Perfect Seared Crust"</span>
+                <span className="text-xs font-semibold text-[#e3e2e3]">"Melt-in-Mouth Galouti"</span>
                 <span className="px-1.5 py-0.5 rounded bg-[#39393a] text-[10px] font-bold text-[#ffc174] font-mono">
                   1,420 mentions
                 </span>
@@ -928,7 +921,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                 <span className="material-symbols-outlined text-[#56e5a9] text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
                   verified
                 </span>
-                <span className="text-xs font-semibold text-[#e3e2e3]">"Express Packaging Delivery"</span>
+                <span className="text-xs font-semibold text-[#e3e2e3]">"Chauffeur Temp-Controlled Transit"</span>
                 <span className="px-1.5 py-0.5 rounded bg-[#39393a] text-[10px] font-bold text-[#56e5a9] font-mono">
                   982 mentions
                 </span>
@@ -937,14 +930,14 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                 <span className="material-symbols-outlined text-[#ffc174] text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
                   camera
                 </span>
-                <span className="text-xs font-semibold text-[#e3e2e3]">"Mouthwatering Presentation"</span>
+                <span className="text-xs font-semibold text-[#e3e2e3]">"24K Vark Presentation"</span>
                 <span className="px-1.5 py-0.5 rounded bg-[#39393a] text-[10px] font-bold text-[#ffc174] font-mono">
                   870 mentions
                 </span>
               </div>
               <div className="px-3 py-2 rounded-xl bg-[#292a2b] border border-[#343536] flex items-center gap-2 shadow-sm">
                 <span className="material-symbols-outlined text-[#a08e7a] text-base">restaurant</span>
-                <span className="text-xs font-semibold text-[#e3e2e3]">"Balanced Acidity"</span>
+                <span className="text-xs font-semibold text-[#e3e2e3]">"Subtle Kokum Acidity"</span>
                 <span className="px-1.5 py-0.5 rounded bg-[#39393a] text-[10px] font-bold text-[#d8c3ad] font-mono">
                   610 mentions
                 </span>
@@ -956,12 +949,12 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
           <div className="p-4 rounded-xl bg-[#1b1c1d] border-l-4 border-[#ffc174] border-t border-r border-b border-[#292a2b] space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="text-xs text-[#ffc174] font-semibold">
-                Verified VIP Guest • Dubai Marina Outpost
+                Verified VIP Guest • Mumbai BKC Outpost
               </span>
               <span className="text-[10px] text-[#a08e7a]">2 hours ago</span>
             </div>
             <p className="text-xs text-[#e3e2e3] italic leading-relaxed">
-              "The Wagyu tare glaze balances the smokiness without muting the natural marbling fat. Even in temperature-controlled transit packaging, the sando arrived impeccably crisp."
+              "The Kashmiri saffron and Awadhi galouti glaze balances the smokiness without muting the delicate lamb texture. Even in temperature-controlled transit packaging to Worli Sea Face, the tartlet arrived impeccably warm and crisp."
             </p>
           </div>
         </div>
@@ -978,41 +971,41 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
           </div>
 
           <div className="space-y-3">
-            {/* Gluten-Free */}
+            {/* Jain Gastronomy */}
             <div className="p-3 rounded-xl bg-[#292a2b] border border-[#343536] space-y-1.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#ffc174] text-base">grain</span>
-                  <span className="text-xs font-bold text-[#e3e2e3]">Gluten-Free Substitutions</span>
+                  <span className="material-symbols-outlined text-[#ffc174] text-base">spa</span>
+                  <span className="text-xs font-bold text-[#e3e2e3]">Jain Haute Cuisine Curations</span>
                 </div>
                 <span className="text-sm font-bold text-[#56e5a9] font-mono">
-                  +22% <span className="text-[10px] font-normal text-[#a08e7a]">YoY</span>
+                  +28% <span className="text-[10px] font-normal text-[#a08e7a]">YoY</span>
                 </span>
               </div>
               <div className="w-full bg-[#343536] rounded-full h-1.5 overflow-hidden">
-                <div className="bg-[#56e5a9] h-full rounded-full" style={{ width: '72%' }} />
+                <div className="bg-[#56e5a9] h-full rounded-full" style={{ width: '78%' }} />
               </div>
               <span className="text-[11px] text-[#d8c3ad] block">
-                Driven by tamari-cured sashimi and gluten-free tempura alternatives.
+                No root vegetables, raw plantain galouti, and hing-tempered morel biryani surge.
               </span>
             </div>
 
-            {/* Pescatarian */}
+            {/* Sattvic & Organic */}
             <div className="p-3 rounded-xl bg-[#292a2b] border border-[#343536] space-y-1.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#ffb3b6] text-base">set_meal</span>
-                  <span className="text-xs font-bold text-[#e3e2e3]">Pescatarian Curations</span>
+                  <span className="material-symbols-outlined text-[#ffb3b6] text-base">energy_savings_leaf</span>
+                  <span className="text-xs font-bold text-[#e3e2e3]">Sattvic A2 Ghee Preparations</span>
                 </div>
                 <span className="text-sm font-bold text-[#56e5a9] font-mono">
-                  +14% <span className="text-[10px] font-normal text-[#a08e7a]">YoY</span>
+                  +19% <span className="text-[10px] font-normal text-[#a08e7a]">YoY</span>
                 </span>
               </div>
               <div className="w-full bg-[#343536] rounded-full h-1.5 overflow-hidden">
-                <div className="bg-[#ffb3b6] h-full rounded-full" style={{ width: '58%' }} />
+                <div className="bg-[#ffb3b6] h-full rounded-full" style={{ width: '64%' }} />
               </div>
               <span className="text-[11px] text-[#d8c3ad] block">
-                Surge in cold-water king crab and black cod special requests.
+                Surge in Bilona ghee confit morels and Himalayan pink salt cold-pressed curations.
               </span>
             </div>
 
@@ -1021,7 +1014,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-[#ffc174] text-base">local_bar</span>
-                  <span className="text-xs font-bold text-[#e3e2e3]">Premium Zero-Proof Pairings</span>
+                  <span className="text-xs font-bold text-[#e3e2e3]">Zero-Proof Fermented Botanical Shrubs</span>
                 </div>
                 <span className="text-sm font-bold text-[#ffc174] font-mono">
                   +35% <span className="text-[10px] font-normal text-[#a08e7a]">Surge</span>
@@ -1031,7 +1024,7 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
                 <div className="bg-[#ffc174] h-full rounded-full" style={{ width: '86%' }} />
               </div>
               <span className="text-[11px] text-[#d8c3ad] block">
-                Smoked lapsang souchong infusions and fermented yuzu elixirs commanding $24/glass.
+                Smoked Darjeeling first flush infusions and spiced kokum cumin elixirs commanding ₹850/glass.
               </span>
             </div>
           </div>

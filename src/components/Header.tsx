@@ -41,11 +41,12 @@ export const Header: React.FC<HeaderProps> = ({
             className="bg-[#292a2b] text-[#e3e2e3] font-semibold text-xs sm:text-sm pl-9 pr-8 py-2 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#ffc174] hover:bg-[#343536] transition-colors border border-[#343536]"
           >
             <option value="all">All Locations (6 Active)</option>
-            <option value="tokyo">Tokyo Roppongi</option>
-            <option value="nyc">New York SoHo</option>
-            <option value="london">London Mayfair</option>
-            <option value="dubai">Dubai Marina</option>
-            <option value="paris">Paris Le Marais</option>
+            <option value="mumbai">Mumbai BKC Flagship</option>
+            <option value="delhi">New Delhi Lutyens</option>
+            <option value="bengaluru">Bengaluru Indiranagar</option>
+            <option value="hyderabad">Hyderabad Jubilee Hills</option>
+            <option value="kolkata">Kolkata Park Street</option>
+            <option value="chennai">Chennai Nungambakkam</option>
           </select>
           <span className="material-symbols-outlined absolute right-2 text-[#a08e7a] pointer-events-none text-base">
             expand_more
