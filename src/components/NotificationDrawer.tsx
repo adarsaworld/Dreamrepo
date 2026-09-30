@@ -59,24 +59,29 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-[#1b1c1d] border-l border-[#292a2b] shadow-2xl p-6 flex flex-col justify-between">
+        <div className="w-screen max-w-md bg-white border-l border-[#e8decb] shadow-2xl p-6 flex flex-col justify-between">
           <div className="space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#292a2b]">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#ffc174] text-xl">
-                  notifications_active
-                </span>
-                <h3 className="font-headline font-bold text-base text-[#e3e2e3]">
-                  Syndicate Priority Alerts
-                </h3>
+            <div className="flex items-center justify-between pb-3 border-b border-[#f0ece1]">
+              <div className="flex items-center gap-2.5">
+                <div className="p-1.5 rounded-lg bg-[#fef3c7] text-[#b45309] border border-[#fde68a]">
+                  <svg className="w-5 h-5 text-[#b45309]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="font-headline font-bold text-base text-[#1c1917]">
+                    Syndicate Priority Alerts
+                  </h3>
+                  <span className="text-[10px] text-[#78716c] font-medium">Real-time fleet notifications</span>
+                </div>
               </div>
               <button
                 onClick={onClose}
-                className="p-1 rounded-lg text-[#a08e7a] hover:text-[#e3e2e3] hover:bg-[#292a2b] transition-colors"
+                className="p-1.5 rounded-lg text-[#78716c] hover:text-[#1c1917] hover:bg-[#faf8f5] transition-colors cursor-pointer"
               >
                 <span className="material-symbols-outlined text-lg">close</span>
               </button>
@@ -86,26 +91,26 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
               {notifications.map((n) => (
                 <div
                   key={n.id}
-                  className="p-3.5 rounded-xl bg-[#1f2021] border border-[#292a2b] hover:border-[#ffc174]/40 transition-colors space-y-2"
+                  className="p-4 rounded-2xl bg-[#faf8f5] border border-[#e8decb] hover:border-[#b45309]/50 hover:bg-white hover:shadow-md transition-all space-y-2 cursor-pointer"
                 >
                   <div className="flex items-start justify-between">
                     <span
-                      className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded ${
+                      className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${
                         n.type === 'alert'
-                          ? 'bg-[#cc003c]/20 text-[#ffb3b6]'
+                          ? 'bg-[#fef2f2] text-[#991b1b] border-[#fecaca]'
                           : n.type === 'warning'
-                          ? 'bg-[#f59e0b]/20 text-[#ffc174]'
-                          : 'bg-[#56e5a9]/20 text-[#56e5a9]'
+                          ? 'bg-[#fef3c7] text-[#92400e] border-[#fde68a]'
+                          : 'bg-[#ecfdf5] text-[#065f46] border-[#a7f3d0]'
                       }`}
                     >
                       {n.outpost}
                     </span>
-                    <span className="text-[11px] text-[#a08e7a]">{n.time}</span>
+                    <span className="text-[11px] text-[#78716c] font-mono font-medium">{n.time}</span>
                   </div>
-                  <h4 className="text-sm font-semibold text-[#e3e2e3] leading-snug">
+                  <h4 className="text-sm font-bold text-[#1c1917] leading-snug">
                     {n.title}
                   </h4>
-                  <p className="text-xs text-[#d8c3ad] leading-relaxed">
+                  <p className="text-xs text-[#57534e] leading-relaxed">
                     {n.description}
                   </p>
                   <div className="pt-1 flex justify-end">
@@ -116,7 +121,7 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
                         }
                         onClose();
                       }}
-                      className="text-xs text-[#ffc174] hover:underline font-semibold flex items-center gap-1"
+                      className="text-xs text-[#b45309] hover:text-[#d97706] hover:underline font-bold flex items-center gap-1 cursor-pointer"
                     >
                       <span>{n.action}</span>
                       <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -127,11 +132,11 @@ export const NotificationDrawer: React.FC<NotificationDrawerProps> = ({
             </div>
           </div>
 
-          <div className="pt-4 border-t border-[#292a2b] flex items-center justify-between">
-            <span className="text-xs text-[#a08e7a]">4 unread fleet alerts</span>
+          <div className="pt-4 border-t border-[#f0ece1] flex items-center justify-between">
+            <span className="text-xs text-[#78716c] font-medium">4 unread fleet alerts</span>
             <button
               onClick={onClose}
-              className="px-3 py-1.5 rounded-lg bg-[#292a2b] hover:bg-[#343536] text-xs text-[#e3e2e3] font-semibold transition-colors"
+              className="px-3.5 py-1.5 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-xs text-[#1c1917] font-bold border border-[#e8decb] transition-colors cursor-pointer"
             >
               Mark All Read
             </button>

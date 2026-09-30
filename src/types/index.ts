@@ -4,7 +4,8 @@ export type NavigationTab =
   | 'menu-studio'
   | 'staff-payroll'
   | 'inventory-supply'
-  | 'settings-integrations';
+  | 'settings-integrations'
+  | 'user-profile';
 
 export type LocationId = 'all' | 'mumbai' | 'delhi' | 'bengaluru' | 'hyderabad' | 'kolkata' | 'chennai';
 
@@ -103,9 +104,9 @@ export interface InventoryItem {
   stockOnHand: number;
   unit: string;
   parLevel: number;
-  threshold: number;
+  threshold?: number;
   unitCost: number;
-  status: 'Low Stock Alert' | 'Restock Triggered' | 'Adequate Reserve' | 'Order Recommended';
+  status: 'Low Stock Alert' | 'Restock Triggered' | 'Adequate Reserve' | 'Order Recommended' | 'Critical Stock Depletion' | 'Par Buffer Warning' | 'Optimal Par';
   burnRate: string;
   urgency: 'critical' | 'warning' | 'optimal';
   supplier: string;
@@ -131,5 +132,54 @@ export interface InwardStockRecord {
   supplier: string;
   totalCost: number;
   timestamp: string;
+}
+
+export interface UserProfileData {
+  employeeId: string;
+  name: string;
+  phone: string;
+  email: string;
+  roleTitle: string;
+  outpost: string;
+  avatarUrl: string;
+  emergencyContact: string;
+  dateOfJoining: string;
+  clearanceLevel: string;
+  payrollStatus: {
+    cycle: string;
+    baseRetainer: number;
+    extraBonus: number;
+    netPayable: number;
+    paymentStatus: 'Dispatched (NEFT)' | 'Processing' | 'Held';
+    utrNumber: string;
+    bankAccountMasked: string;
+    lastDisbursedDate: string;
+  };
+  overtimeStatus: {
+    hoursLogged: number;
+    hourlyMultiplier: string;
+    overtimePay: number;
+    festivalBonus: number;
+    totalExtra: number;
+    approvalOfficer: string;
+    verificationStatus: 'Audited & Approved' | 'Pending Audit';
+  };
+}
+
+export interface TeamMember {
+  id: string;
+  employeeId: string;
+  name: string;
+  phone: string;
+  email: string;
+  avatar: string;
+  roleTitle: string;
+  department: 'kitchen' | 'service' | 'housekeeping' | 'bar' | 'security';
+  outpost: string;
+  baseSalary: number;
+  status: 'active' | 'banned' | 'on_leave';
+  banReason?: string;
+  bannedAt?: string;
+  joinedDate: string;
 }
 

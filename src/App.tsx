@@ -13,12 +13,13 @@ import { MenuStudioView } from './components/MenuStudioView';
 import { StaffPayrollView } from './components/StaffPayrollView';
 import { InventorySupplyView } from './components/InventorySupplyView';
 import { SettingsIntegrationsView } from './components/SettingsIntegrationsView';
+import { UserProfileView } from './components/UserProfileView';
 import { NotificationDrawer } from './components/NotificationDrawer';
 import { QuickOrderModal } from './components/QuickOrderModal';
 import { Toast } from './components/Toast';
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<NavigationTab>('preferred-flavors');
+  const [currentTab, setCurrentTab] = useState<NavigationTab>('branch-overview');
   const [currentLocation, setCurrentLocation] = useState<LocationId>('all');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -35,7 +36,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#121314] text-[#e3e2e3] font-body flex">
+    <div className="min-h-screen bg-[#faf8f5] text-[#1c1917] font-body flex">
       {/* Sidebar Navigation Rail */}
       <Sidebar
         currentTab={currentTab}
@@ -65,6 +66,10 @@ export default function App() {
           onToggleNotifications={() => setNotificationsOpen(!notificationsOpen)}
           onOpenMobileMenu={() => setMobileMenuOpen(true)}
           notificationCount={4}
+          onOpenProfile={() => setCurrentTab('user-profile')}
+          userName="Adarsa Parida"
+          userRole="Managing Partner / Executive Director"
+          onShowToast={showToast}
         />
 
         {/* Content Canvas */}
@@ -99,6 +104,13 @@ export default function App() {
 
           {currentTab === 'settings-integrations' && (
             <SettingsIntegrationsView onShowToast={showToast} />
+          )}
+
+          {currentTab === 'user-profile' && (
+            <UserProfileView
+              onShowToast={showToast}
+              onNavigateTab={(tab) => setCurrentTab(tab)}
+            />
           )}
         </main>
       </div>

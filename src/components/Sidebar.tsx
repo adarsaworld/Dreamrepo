@@ -62,6 +62,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       sublabel: 'POS & Delivery APIs',
       icon: 'hub',
     },
+    {
+      id: 'user-profile',
+      label: 'User Profile & Team',
+      sublabel: 'Dossier, Payroll & Roster',
+      icon: 'account_circle',
+    },
   ];
 
   return (
@@ -69,32 +75,32 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Mobile Backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden transition-opacity"
           onClick={onCloseMobile}
           aria-hidden="true"
         />
       )}
 
-      {/* Sidebar Rail */}
+      {/* Sidebar Rail with vibrant luxury styling */}
       <aside
-        className={`fixed left-0 top-0 h-screen w-72 bg-[#1b1c1d]/95 backdrop-blur-2xl z-50 flex flex-col justify-between border-r border-[#292a2b] shadow-2xl transition-transform duration-300 lg:translate-x-0 ${
+        className={`fixed left-0 top-0 h-screen w-72 bg-white/95 backdrop-blur-2xl z-50 flex flex-col justify-between border-r border-[#e8decb] shadow-xl transition-transform duration-300 lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex flex-col flex-1 min-h-0">
-          {/* Logo & Brand Header */}
-          <div className="h-16 px-6 flex items-center justify-between bg-[#0d0e0f]/60 border-b border-[#292a2b]">
+          {/* Logo & Brand Header with animated subtle gold gleam */}
+          <div className="h-16 px-6 flex items-center justify-between bg-[#f5f0e6]/70 border-b border-[#e8decb]">
             <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-[#f59e0b] to-[#b45309] p-0.5 shadow-md flex items-center justify-center">
-                <div className="w-full h-full bg-[#121314] rounded-md flex items-center justify-center">
-                  <span className="material-symbols-outlined text-[#ffc174] text-xl">ramen_dining</span>
+              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#f59e0b] via-[#ea580c] to-[#b45309] p-0.5 shadow-md flex items-center justify-center animate-pulse-subtle">
+                <div className="w-full h-full bg-[#faf8f5] rounded-[10px] flex items-center justify-center">
+                  <span className="material-symbols-outlined text-[#b45309] text-xl">ramen_dining</span>
                 </div>
               </div>
               <div className="flex flex-col">
-                <span className="font-title text-base text-[#e3e2e3] font-bold tracking-wider uppercase leading-tight">
+                <span className="font-title text-base text-[#1c1917] font-bold tracking-wider uppercase leading-tight">
                   Kizen Empire
                 </span>
-                <span className="font-body text-[10px] text-[#ffc174] tracking-widest uppercase font-semibold">
+                <span className="font-body text-[10px] text-[#b45309] tracking-widest uppercase font-bold">
                   Executive Suite
                 </span>
               </div>
@@ -103,7 +109,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {/* Mobile Close Button */}
             <button
               onClick={onCloseMobile}
-              className="lg:hidden p-1.5 rounded-lg text-[#a08e7a] hover:text-[#e3e2e3] hover:bg-[#292a2b] transition-colors"
+              className="lg:hidden p-1.5 rounded-lg text-[#78716c] hover:text-[#1c1917] hover:bg-[#f4eee2] transition-colors cursor-pointer"
               aria-label="Close menu"
             >
               <span className="material-symbols-outlined text-lg">close</span>
@@ -112,12 +118,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Section Kicker */}
           <div className="px-4 py-2.5">
-            <span className="px-2 font-body text-[10px] uppercase tracking-wider text-[#a08e7a] font-bold">
+            <span className="px-2 font-body text-[10px] uppercase tracking-wider text-[#78716c] font-bold">
               Operations Fleet
             </span>
           </div>
 
-          {/* Navigation Links */}
+          {/* Navigation Links with animated hover transitions */}
           <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
             {navItems.map((item) => {
               const isActive = currentTab === item.id;
@@ -128,15 +134,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onTabChange(item.id);
                     onCloseMobile();
                   }}
-                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all group text-left ${
+                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-200 group text-left cursor-pointer ${
                     isActive
-                      ? 'bg-[#ffc174] text-[#472a00] font-semibold shadow-[0_0_20px_rgba(245,158,11,0.25)]'
-                      : 'text-[#d8c3ad] hover:bg-[#292a2b] hover:text-[#e3e2e3]'
+                      ? 'bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] text-[#92400e] font-bold shadow-[0_2px_12px_rgba(245,158,11,0.25)] border border-[#fde68a] translate-x-1'
+                      : 'text-[#57534e] hover:bg-[#f5efe4] hover:text-[#1c1917] hover:translate-x-0.5'
                   }`}
                 >
                   <span
-                    className={`material-symbols-outlined text-xl transition-colors ${
-                      isActive ? 'text-[#472a00]' : 'text-[#a08e7a] group-hover:text-[#ffc174]'
+                    className={`material-symbols-outlined text-xl transition-transform duration-200 group-hover:scale-110 ${
+                      isActive ? 'text-[#b45309]' : 'text-[#78716c] group-hover:text-[#b45309]'
                     }`}
                   >
                     {item.icon}
@@ -147,12 +153,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         {item.label}
                       </span>
                       {item.badge && !isActive && (
-                        <span className="h-2 w-2 rounded-full bg-[#cc003c] animate-pulse" />
+                        <span className="h-2 w-2 rounded-full bg-[#dc2626] animate-pulse" />
                       )}
                     </div>
                     <span
                       className={`text-[11px] truncate mt-0.5 ${
-                        isActive ? 'text-[#472a00]/80' : 'text-[#a08e7a]'
+                        isActive ? 'text-[#b45309]/80' : 'text-[#78716c]'
                       }`}
                     >
                       {item.sublabel}
@@ -164,36 +170,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </nav>
         </div>
 
-        {/* Live Syndicate Network Telemetry Widget */}
-        <div className="p-4 m-3 rounded-xl bg-[#0d0e0f]/90 border border-[#292a2b] backdrop-blur-md shadow-lg">
+        {/* Live Syndicate Network Telemetry Widget with animated pulse */}
+        <div className="p-4 m-3 rounded-2xl bg-gradient-to-br from-[#faf8f5] to-[#f5f0e6] border border-[#e8decb] shadow-sm">
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#56e5a9] shadow-[0_0_8px_#56e5a9] animate-pulse" />
-              <span className="text-[10px] uppercase tracking-wider text-[#a08e7a] font-bold">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#047857] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#047857]" />
+              </span>
+              <span className="text-[10px] uppercase tracking-wider text-[#78716c] font-bold">
                 Syndicate Network
               </span>
             </div>
-            <span className="text-[10px] text-[#56e5a9] font-semibold uppercase tracking-wider bg-[#56e5a9]/10 px-1.5 py-0.5 rounded">
+            <span className="text-[10px] text-[#047857] font-bold uppercase tracking-wider bg-[#ecfdf5] border border-[#a7f3d0] px-1.5 py-0.5 rounded-full">
               Live
             </span>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-[#d8c3ad]">Tables Occupied</span>
-              <span className="text-[#e3e2e3] font-bold tabular-nums">
+              <span className="text-[#57534e]">Tables Occupied</span>
+              <span className="text-[#1c1917] font-bold tabular-nums font-mono">
                 {tablesOccupiedPercent}%
               </span>
             </div>
-            <div className="w-full bg-[#343536] rounded-full h-1.5 overflow-hidden">
+            <div className="w-full bg-[#e8ded0] rounded-full h-2 overflow-hidden shadow-inner">
               <div
-                className="bg-[#f59e0b] h-full rounded-full transition-all duration-700 shadow-[0_0_8px_rgba(245,158,11,0.5)]"
+                className="bg-gradient-to-r from-[#f59e0b] to-[#ea580c] h-full rounded-full transition-all duration-1000 shadow-sm"
                 style={{ width: `${tablesOccupiedPercent}%` }}
               />
             </div>
             <div className="flex items-center justify-between pt-0.5 text-xs">
-              <span className="text-[#a08e7a]">Dispatch Velocity</span>
-              <span className="text-[#ffc174] font-semibold tabular-nums">
+              <span className="text-[#78716c]">Dispatch Velocity</span>
+              <span className="text-[#b45309] font-bold tabular-nums font-mono">
                 {dispatchVelocity} ord/min
               </span>
             </div>
