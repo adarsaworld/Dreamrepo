@@ -1,0 +1,33 @@
+{
+  "id": "/",
+  "name": "Kizen Empire - Executive Gastronomy Suite",
+  "short_name": "KizenEmpire",
+  "description": "Autonomous multi-branch gastronomy operations command for Kizen Empire luxury dining syndicate across Indian metros.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#faf8f5",
+  "background_color": "#faf8f5",
+  "categories": ["business", "food", "productivity"],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

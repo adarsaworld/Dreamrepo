@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { INVENTORY_ITEMS } from '../data/mockData';
-import { InventoryItem, InwardStockRecord } from '../types';
+import { InventoryItem, InwardStockRecord, PredictiveParItem, PurchaseOrderRecord } from '../types';
+import { INITIAL_PREDICTIVE_PAR_ITEMS, INITIAL_PURCHASE_ORDERS } from '../data/enterpriseData';
 
 interface InventorySupplyViewProps {
   onShowToast: (title: string, desc: string, type?: 'success' | 'warning' | 'info') => void;
@@ -10,6 +11,11 @@ export const InventorySupplyView: React.FC<InventorySupplyViewProps> = ({ onShow
   const [items, setItems] = useState<InventoryItem[]>(INVENTORY_ITEMS);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [search, setSearch] = useState('');
+  
+  // Predictive Supply Chain & Auto PO State
+  const [predictiveItems, setPredictiveItems] = useState<PredictiveParItem[]>(INITIAL_PREDICTIVE_PAR_ITEMS);
+  const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderRecord[]>(INITIAL_PURCHASE_ORDERS);
+  const [activeInventoryTab, setActiveInventoryTab] = useState<'inventory' | 'predictive_po'>('inventory');
   
   // Add Stock Modal State
   const [isAddStockOpen, setIsAddStockOpen] = useState(false);
@@ -213,6 +219,27 @@ export const InventorySupplyView: React.FC<InventorySupplyViewProps> = ({ onShow
     onShowToast(
       'Purchase Order Dispatched',
       `PO dispatched to primary purveyor for ${itemName}. Delivery slotted within 48h to Central Cold Chain.`
+    );
+  };
+
+  const handleAutoDispatchPO = (item: PredictiveParItem) => {
+    const newPO: PurchaseOrderRecord = {
+      id: `po-${Date.now().toString().slice(-4)}`,
+      poNumber: `PO-KZ-2026-${Math.floor(100 + Math.random() * 900)}`,
+      supplierName: item.primarySupplier,
+      outpost: targetOutpost,
+      totalItems: 1,
+      estimatedCost: Math.round(item.recommendedPOQty * 15000),
+      status: 'Dispatched to Vendor',
+      dispatchChannel: 'WhatsApp Direct',
+      dispatchedAt: new Date().toLocaleTimeString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit' }),
+    };
+
+    setPurchaseOrders([newPO, ...purchaseOrders]);
+    onShowToast(
+      'Automated PO Dispatched',
+      `Sent ${newPO.poNumber} via WhatsApp Direct to ${item.primarySupplier} for ${item.recommendedPOQty} ${item.unit} ${item.ingredientName}.`,
+      'success'
     );
   };
 
@@ -457,7 +484,176 @@ export const InventorySupplyView: React.FC<InventorySupplyViewProps> = ({ onShow
         </div>
       </div>
 
-      {/* Main Stock Table */}
+      {/* Inventory & Predictive PO Sub-tabs */}
+      <div className="flex items-center gap-2 bg-[#faf8f5] p-1.5 rounded-2xl border border-[#e8decb] w-max">
+        <button
+          onClick={() => setActiveInventoryTab('inventory')}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            activeInventoryTab === 'inventory'
+              ? 'bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white shadow-xs'
+              : 'text-[#57534e] hover:text-[#1c1917]'
+          }`}
+        >
+          <span className="material-symbols-outlined text-base">inventory_2</span>
+          <span>Monitored Vault Stock & Par Levels ({items.length})</span>
+        </button>
+        <button
+          onClick={() => setActiveInventoryTab('predictive_po')}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            activeInventoryTab === 'predictive_po'
+              ? 'bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white shadow-xs'
+              : 'text-[#57534e] hover:text-[#1c1917]'
+          }`}
+        >
+          <span className="material-symbols-outlined text-base">trending_up</span>
+          <span>Predictive 72h Forecasting & Auto PO ({predictiveItems.length})</span>
+        </button>
+      </div>
+
+      {activeInventoryTab === 'predictive_po' ? (
+        /* Predictive 72h Par Burn & Automated PO Section */
+        <div className="space-y-6 animate-fade-in">
+          <div className="bg-white border border-[#e8decb] rounded-2xl p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#f0ece1]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-r from-[#ea580c] to-[#b45309] text-white flex items-center justify-center">
+                  <span className="material-symbols-outlined text-xl">auto_graph</span>
+                </div>
+                <div>
+                  <h3 className="font-headline font-bold text-base text-[#1c1917]">
+                    72-Hour Autonomous Par Burn Heuristic Engine
+                  </h3>
+                  <p className="text-xs text-[#78716c]">
+                    Integrates weekend VIP table reservations, monsoon weather surge models, and festival degustations
+                  </p>
+                </div>
+              </div>
+              <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-[#fef3c7] text-[#92400e] border border-[#fde68a]">
+                Weekend Rush + Monsoon Active
+              </span>
+            </div>
+
+            {/* Predictive Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {predictiveItems.map((pred) => (
+                <div key={pred.id} className="p-4 rounded-xl border border-[#e8decb] bg-[#faf8f5] space-y-3 shadow-xs">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-headline font-bold text-sm text-[#1c1917]">
+                        {pred.ingredientName}
+                      </h4>
+                      <span className="text-[10px] text-[#78716c] uppercase font-bold">
+                        {pred.category} • Supplier: {pred.primarySupplier}
+                      </span>
+                    </div>
+                    <span
+                      className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
+                        pred.urgency === 'critical'
+                          ? 'bg-[#fef2f2] text-[#991b1b] border-[#fecaca]'
+                          : pred.urgency === 'advisory'
+                          ? 'bg-[#fffbeb] text-[#92400e] border-[#fde68a]'
+                          : 'bg-[#ecfdf5] text-[#065f46] border-[#a7f3d0]'
+                      }`}
+                    >
+                      {pred.urgency === 'critical' ? 'PO Urgently Needed' : 'Advisory Par Buffer'}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-white border border-[#e8decb] text-center">
+                    <div>
+                      <span className="text-[10px] text-[#78716c] uppercase font-bold block">Current Stock</span>
+                      <span className="font-mono font-bold text-xs text-[#b45309]">
+                        {pred.currentStock} {pred.unit}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-[#78716c] uppercase font-bold block">72h Forecast Need</span>
+                      <span className="font-mono font-bold text-xs text-[#1c1917]">
+                        {pred.forecasted72hNeed} {pred.unit}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-[#78716c] uppercase font-bold block">Recommended PO</span>
+                      <span className="font-mono font-bold text-xs text-[#047857]">
+                        +{pred.recommendedPOQty} {pred.unit}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1 text-xs">
+                    <div className="flex items-center gap-1.5 text-[#b45309] font-medium text-[11px]">
+                      <span className="material-symbols-outlined text-xs">cloudy_snowing</span>
+                      <span>{pred.weatherFactor}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[#047857] font-medium text-[11px]">
+                      <span className="material-symbols-outlined text-xs">celebration</span>
+                      <span>{pred.festivalFactor}</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-[#e8decb] flex items-center justify-between">
+                    <span className="text-[11px] text-[#78716c] font-mono">
+                      Vendor WhatsApp: {pred.supplierPhone}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => handleAutoDispatchPO(pred)}
+                      className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#047857] to-[#059669] text-white font-bold text-xs shadow-xs hover:brightness-110 active:scale-95 transition-all cursor-pointer flex items-center gap-1"
+                    >
+                      <span className="material-symbols-outlined text-xs">send</span>
+                      <span>Dispatch PO (+{pred.recommendedPOQty} {pred.unit})</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Dispatched Purchase Orders Ledger */}
+          <div className="bg-white border border-[#e8decb] rounded-2xl overflow-hidden shadow-xs space-y-3 p-5">
+            <h4 className="font-headline font-bold text-sm text-[#1c1917]">
+              Active Purchase Order Ledger (Auto-Dispatched)
+            </h4>
+            <div className="overflow-x-auto border border-[#e8decb] rounded-xl">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="bg-[#faf8f5] text-[#57534e] text-[10px] uppercase font-bold border-b border-[#e8decb]">
+                    <th className="py-2.5 px-4">PO Number</th>
+                    <th className="py-2.5 px-4">Purveyor Guild</th>
+                    <th className="py-2.5 px-4">Metro Outpost</th>
+                    <th className="py-2.5 px-4 text-right">Estimated Cost</th>
+                    <th className="py-2.5 px-4">Dispatch Channel</th>
+                    <th className="py-2.5 px-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#eee7da]">
+                  {purchaseOrders.map((po) => (
+                    <tr key={po.id} className="hover:bg-[#faf8f5]">
+                      <td className="py-2.5 px-4 font-mono font-bold text-[#b45309]">{po.poNumber}</td>
+                      <td className="py-2.5 px-4 font-semibold text-[#1c1917]">{po.supplierName}</td>
+                      <td className="py-2.5 px-4 text-[#78716c]">{po.outpost}</td>
+                      <td className="py-2.5 px-4 text-right font-mono font-bold text-[#047857]">
+                        ₹{po.estimatedCost.toLocaleString('en-IN')}
+                      </td>
+                      <td className="py-2.5 px-4">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#faf8f5] text-[#1c1917] border border-[#e8decb]">
+                          {po.dispatchChannel}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-4">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ecfdf5] text-[#065f46] border border-[#a7f3d0]">
+                          {po.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      ) : (
+      /* Main Stock Table */
       <div className="bg-white border border-[#e8decb] rounded-2xl overflow-hidden shadow-[0_10px_25px_-5px_rgba(217,119,6,0.06)]">
         {/* Table Filter Header */}
         <div className="p-4 bg-[#faf8f5] border-b border-[#e8decb] flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -603,6 +799,7 @@ export const InventorySupplyView: React.FC<InventorySupplyViewProps> = ({ onShow
           </table>
         </div>
       </div>
+      )}
 
       {/* Interactive Add Stock Modal for Admin */}
       {isAddStockOpen && (

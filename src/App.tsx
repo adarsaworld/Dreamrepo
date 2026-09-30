@@ -4,23 +4,30 @@
  */
 
 import React, { useState } from 'react';
-import { NavigationTab, LocationId, ToastMessage } from './types';
+import { NavigationTab, LocationId, ToastMessage, UserRole } from './types';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { BranchOverviewView } from './components/BranchOverviewView';
+import { KitchenDisplayView } from './components/KitchenDisplayView';
 import { PreferredFlavorsView } from './components/PreferredFlavorsView';
 import { MenuStudioView } from './components/MenuStudioView';
 import { StaffPayrollView } from './components/StaffPayrollView';
 import { InventorySupplyView } from './components/InventorySupplyView';
+import { GSTComplianceView } from './components/GSTComplianceView';
+import { VIPGuestCRMView } from './components/VIPGuestCRMView';
+import { AuditSecurityView } from './components/AuditSecurityView';
 import { SettingsIntegrationsView } from './components/SettingsIntegrationsView';
 import { UserProfileView } from './components/UserProfileView';
 import { NotificationDrawer } from './components/NotificationDrawer';
 import { QuickOrderModal } from './components/QuickOrderModal';
 import { Toast } from './components/Toast';
+import { OfflineSyncBanner } from './components/OfflineSyncBanner';
+import { useOfflineSync } from './hooks/useOfflineSync';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<NavigationTab>('branch-overview');
   const [currentLocation, setCurrentLocation] = useState<LocationId>('all');
+  const [currentRole, setCurrentRole] = useState<UserRole>('super_admin');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [quickOrderOpen, setQuickOrderOpen] = useState(false);
@@ -34,6 +41,17 @@ export default function App() {
       type,
     });
   };
+
+  // Offline Edge Resilience & Cloud Failover Sync
+  const {
+    isOnline,
+    offlineQueue,
+    isSyncing,
+    cloudKitchenFailoverActive,
+    syncPendingQueue,
+    toggleCloudKitchenFailover,
+    simulateOfflineToggle,
+  } = useOfflineSync(showToast);
 
   return (
     <div className="min-h-screen bg-[#faf8f5] text-[#1c1917] font-body flex">
@@ -69,49 +87,90 @@ export default function App() {
           onOpenProfile={() => setCurrentTab('user-profile')}
           userName="Adarsa Parida"
           userRole="Managing Partner / Executive Director"
+          currentRole={currentRole}
+          onNavigateTab={(tab) => setCurrentTab(tab)}
           onShowToast={showToast}
         />
 
         {/* Content Canvas */}
-        <main className="flex-1 w-full pt-20 px-4 sm:px-6 lg:px-8 py-6 max-w-[1600px] mx-auto">
-          {currentTab === 'branch-overview' && (
-            <BranchOverviewView
-              currentLocation={currentLocation}
-              onNavigateTab={(tab) => setCurrentTab(tab)}
-              onShowToast={showToast}
-            />
-          )}
+        <main className="flex-1 w-full pt-16 flex flex-col min-w-0">
+          {/* Offline Resilience & Auto Cloud Failover Indicator */}
+          <OfflineSyncBanner
+            isOnline={isOnline}
+            offlineQueue={offlineQueue}
+            isSyncing={isSyncing}
+            cloudKitchenFailoverActive={cloudKitchenFailoverActive}
+            onSync={syncPendingQueue}
+            onToggleFailover={toggleCloudKitchenFailover}
+            onSimulateToggle={simulateOfflineToggle}
+          />
 
-          {currentTab === 'preferred-flavors' && (
-            <PreferredFlavorsView
-              currentLocation={currentLocation}
-              onNavigateTab={(tab) => setCurrentTab(tab)}
-              onShowToast={showToast}
-            />
-          )}
+          <div className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-6 max-w-[1600px] mx-auto">
+            {currentTab === 'branch-overview' && (
+              <BranchOverviewView
+                currentLocation={currentLocation}
+                onNavigateTab={(tab) => setCurrentTab(tab)}
+                onShowToast={showToast}
+              />
+            )}
 
-          {currentTab === 'menu-studio' && (
-            <MenuStudioView onShowToast={showToast} />
-          )}
+            {currentTab === 'kitchen-display' && (
+              <KitchenDisplayView
+                onShowToast={showToast}
+                onNavigateTab={(tab) => setCurrentTab(tab)}
+              />
+            )}
 
-          {currentTab === 'staff-payroll' && (
-            <StaffPayrollView onShowToast={showToast} />
-          )}
+            {currentTab === 'preferred-flavors' && (
+              <PreferredFlavorsView
+                currentLocation={currentLocation}
+                onNavigateTab={(tab) => setCurrentTab(tab)}
+                onShowToast={showToast}
+              />
+            )}
 
-          {currentTab === 'inventory-supply' && (
-            <InventorySupplyView onShowToast={showToast} />
-          )}
+            {currentTab === 'menu-studio' && (
+              <MenuStudioView onShowToast={showToast} />
+            )}
 
-          {currentTab === 'settings-integrations' && (
-            <SettingsIntegrationsView onShowToast={showToast} />
-          )}
+            {currentTab === 'staff-payroll' && (
+              <StaffPayrollView onShowToast={showToast} />
+            )}
 
-          {currentTab === 'user-profile' && (
-            <UserProfileView
-              onShowToast={showToast}
-              onNavigateTab={(tab) => setCurrentTab(tab)}
-            />
-          )}
+            {currentTab === 'inventory-supply' && (
+              <InventorySupplyView onShowToast={showToast} />
+            )}
+
+            {currentTab === 'gst-compliance' && (
+              <GSTComplianceView onShowToast={showToast} />
+            )}
+
+            {currentTab === 'vip-crm' && (
+              <VIPGuestCRMView
+                onShowToast={showToast}
+                onNavigateTab={(tab) => setCurrentTab(tab)}
+              />
+            )}
+
+            {currentTab === 'audit-security' && (
+              <AuditSecurityView
+                currentRole={currentRole}
+                onRoleChange={setCurrentRole}
+                onShowToast={showToast}
+              />
+            )}
+
+            {currentTab === 'settings-integrations' && (
+              <SettingsIntegrationsView onShowToast={showToast} />
+            )}
+
+            {currentTab === 'user-profile' && (
+              <UserProfileView
+                onShowToast={showToast}
+                onNavigateTab={(tab) => setCurrentTab(tab)}
+              />
+            )}
+          </div>
         </main>
       </div>
 

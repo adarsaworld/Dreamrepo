@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LocationId } from '../types';
+import { LocationId, UserRole } from '../types';
 
 interface HeaderProps {
   currentLocation: LocationId;
@@ -12,6 +12,8 @@ interface HeaderProps {
   userName?: string;
   userRole?: string;
   avatarUrl?: string;
+  currentRole?: UserRole;
+  onNavigateTab?: (tab: any) => void;
   onShowToast?: (title: string, desc: string, type?: 'success' | 'warning' | 'info') => void;
 }
 
@@ -26,6 +28,8 @@ export const Header: React.FC<HeaderProps> = ({
   userName = 'Adarsa Parida',
   userRole = 'Managing Partner / Executive Director',
   avatarUrl = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBcfiJf9IlXt2orZyBIY-Sop-V4nL67t_fmxtYijpcrVE3aT5XIwb1CKK99FwYHYfVNKCuwB_Q1QLu0s7LCjBg3wSHrQP8BxFEA-2F2PnRzM6dzEcAwWyjcdNesihmiFx7ZstzVlvvUgQiNXJ4lfNyY2BclIFTyS160SgyGLIm0SrFHy__pRVoLagOoruUbiYJauhPtM7kUP_OTEfqCuySQCYZEurWwUlDGpqAJnNFaARNwAYhnMYbXtg',
+  currentRole = 'super_admin',
+  onNavigateTab,
   onShowToast,
 }) => {
   // Real-Time Cloud Sync State & Dynamic Timer
@@ -160,6 +164,34 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </button>
         </div>
+
+        {/* Quick KDS Screen Trigger */}
+        {onNavigateTab && (
+          <button
+            type="button"
+            onClick={() => onNavigateTab('kitchen-display')}
+            title="Open Live Kitchen Display System"
+            className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white hover:bg-[#faf8f5] text-[#1c1917] font-bold text-xs border border-[#e8decb] hover:border-[#b45309]/50 transition-all shadow-xs cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-base text-[#ea580c]">soup_kitchen</span>
+            <span>KDS Line</span>
+          </button>
+        )}
+
+        {/* Active Role Chip */}
+        {onNavigateTab && (
+          <button
+            type="button"
+            onClick={() => onNavigateTab('audit-security')}
+            title="Active Security Persona & Permissions"
+            className="hidden lg:flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#1c1917] font-mono text-xs border border-[#e8decb] transition-colors cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-xs text-[#047857]">shield_person</span>
+            <span className="text-[11px] font-bold capitalize">
+              {currentRole === 'super_admin' ? 'Super Admin' : currentRole.replace('_', ' ')}
+            </span>
+          </button>
+        )}
 
         {/* Quick Order / Reserve CTA with animated shimmer & hover lift */}
         <button

@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavigationTab } from '../types';
+import { PWAInstallButton } from './PWAInstallButton';
 
 interface SidebarProps {
   currentTab: NavigationTab;
@@ -32,6 +33,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: 'apartment',
     },
     {
+      id: 'kitchen-display',
+      label: 'Kitchen Display (KDS)',
+      sublabel: 'Live Cook Line SLA',
+      icon: 'soup_kitchen',
+      badge: true,
+    },
+    {
       id: 'preferred-flavors',
       label: 'Preferred Flavors',
       sublabel: 'Taste Trends & Rankings',
@@ -52,9 +60,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       id: 'inventory-supply',
       label: 'Inventory & Supply',
-      sublabel: 'Cellar & Larder Alerts',
+      sublabel: 'Cellar & 72h Auto PO',
       icon: 'inventory_2',
       badge: true,
+    },
+    {
+      id: 'gst-compliance',
+      label: 'GST & Reconciliation',
+      sublabel: 'IRN & Pine Labs Feed',
+      icon: 'receipt_long',
+    },
+    {
+      id: 'vip-crm',
+      label: 'VIP CRM & Allergens',
+      sublabel: '6-Metro Guest Dossiers',
+      icon: 'diamond',
+    },
+    {
+      id: 'audit-security',
+      label: 'RBAC & Audit Trail',
+      sublabel: 'SHA-256 Activity Ledger',
+      icon: 'verified_user',
     },
     {
       id: 'settings-integrations',
@@ -64,8 +90,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
     {
       id: 'user-profile',
-      label: 'User Profile & Team',
-      sublabel: 'Dossier, Payroll & Roster',
+      label: 'User Profile & Studio',
+      sublabel: 'Dossier, Team & Veo 3',
       icon: 'account_circle',
     },
   ];
@@ -168,6 +194,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
               );
             })}
           </nav>
+        </div>
+
+        {/* PWA In-App Install Prompt */}
+        <div className="px-3 pt-2">
+          <PWAInstallButton />
         </div>
 
         {/* Live Syndicate Network Telemetry Widget with animated pulse */}
