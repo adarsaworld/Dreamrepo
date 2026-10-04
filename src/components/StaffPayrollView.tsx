@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { StaffMember, JobRequisition } from '../types';
 import { INITIAL_STAFF, INITIAL_REQUISITIONS } from '../data/mockData';
+import { Tooltip } from './Tooltip';
+import { DoubleDeleteConfirmModal } from './DoubleDeleteConfirmModal';
 
 interface StaffPayrollViewProps {
   onShowToast: (title: string, desc: string, type?: 'success' | 'warning' | 'info') => void;
@@ -13,12 +15,38 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Double Verification Delete Targets
+  const [deleteStaffTarget, setDeleteStaffTarget] = useState<StaffMember | null>(null);
+  const [deleteReqTarget, setDeleteReqTarget] = useState<JobRequisition | null>(null);
+
   // New Requisition form state
   const [newTitle, setNewTitle] = useState('');
   const [newDept, setNewDept] = useState('Executive & Kitchen');
   const [newOutpost, setNewOutpost] = useState('Mumbai BKC Flagship');
   const [newShift, setNewShift] = useState('Dinner Service Split Shift');
   const [newSalary, setNewSalary] = useState('₹9,00,000 - ₹14,00,000 / yr');
+
+  const handleConfirmDeleteStaff = () => {
+    if (!deleteStaffTarget) return;
+    setStaffMembers((prev) => prev.filter((s) => s.id !== deleteStaffTarget.id));
+    onShowToast(
+      'Staff Member Terminated',
+      `Permanently purged ${deleteStaffTarget.name} (${deleteStaffTarget.staffCode}) from national payroll ledger.`,
+      'warning'
+    );
+    setDeleteStaffTarget(null);
+  };
+
+  const handleConfirmDeleteReq = () => {
+    if (!deleteReqTarget) return;
+    setRequisitions((prev) => prev.filter((r) => r.id !== deleteReqTarget.id));
+    onShowToast(
+      'Job Requisition Deleted',
+      `Removed hiring opening for "${deleteReqTarget.title}" at ${deleteReqTarget.outpost}.`,
+      'info'
+    );
+    setDeleteReqTarget(null);
+  };
 
   const filteredStaff = staffMembers.filter((staff) => {
     const matchesDept =
@@ -378,31 +406,50 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
                     </span>
                   </td>
                   <td className="py-4 px-6 text-right">
-                    {staff.status === 'approved' ? (
-                      <button
-                        type="button"
-                        onClick={() => handleSettleSingle(staff.id, staff.name)}
-                        className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white font-bold text-xs shadow-sm hover:brightness-110 active:scale-95 transition-all cursor-pointer"
-                      >
-                        Settle Now
-                      </button>
-                    ) : staff.status === 'pending' ? (
-                      <button
-                        type="button"
-                        onClick={() => handleVerifySingle(staff.id, staff.name)}
-                        className="px-3.5 py-1.5 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#b45309] font-bold text-xs border border-[#e8decb] hover:border-[#b45309]/30 transition-all cursor-pointer"
-                      >
-                        Audit & Verify
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => onShowToast('UTR Number #IN882', `Retrieved RTGS confirmation UTR for ${staff.name}.`)}
-                        className="px-3 py-1.5 rounded-xl bg-[#faf8f5] text-[#78716c] hover:text-[#1c1917] text-xs font-mono border border-[#e8decb] transition-colors cursor-pointer"
-                      >
-                        UTR #{Math.floor(100000 + Math.random() * 899999)}
-                      </button>
-                    )}
+                    <div className="flex items-center justify-end gap-2">
+                      {staff.status === 'approved' ? (
+                        <Tooltip content="Direct RTGS Bank Settlement" subcontent="Transfers Pay to Salary Account">
+                          <button
+                            type="button"
+                            onClick={() => handleSettleSingle(staff.id, staff.name)}
+                            className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white font-bold text-xs shadow-sm hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                          >
+                            Settle Now
+                          </button>
+                        </Tooltip>
+                      ) : staff.status === 'pending' ? (
+                        <Tooltip content="Audit Attendance & Overtime" subcontent="Validates Biometric Hours">
+                          <button
+                            type="button"
+                            onClick={() => handleVerifySingle(staff.id, staff.name)}
+                            className="px-3.5 py-1.5 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#b45309] font-bold text-xs border border-[#e8decb] hover:border-[#b45309]/30 transition-all cursor-pointer"
+                          >
+                            Audit & Verify
+                          </button>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip content="View RBI UTR Reference" subcontent="Cleared via NEFT/RTGS">
+                          <button
+                            type="button"
+                            onClick={() => onShowToast('UTR Number #IN882', `Retrieved RTGS confirmation UTR for ${staff.name}.`)}
+                            className="px-3 py-1.5 rounded-xl bg-[#faf8f5] text-[#78716c] hover:text-[#1c1917] text-xs font-mono border border-[#e8decb] transition-colors cursor-pointer"
+                          >
+                            UTR #{Math.floor(100000 + Math.random() * 899999)}
+                          </button>
+                        </Tooltip>
+                      )}
+
+                      {/* Double Verification Terminate Button */}
+                      <Tooltip content="Terminate Staff Record" subcontent="Double Verification Required">
+                        <button
+                          type="button"
+                          onClick={() => setDeleteStaffTarget(staff)}
+                          className="p-1.5 rounded-xl text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] border border-transparent hover:border-[#fecaca] transition-all cursor-pointer"
+                        >
+                          <span className="material-symbols-outlined text-base">delete</span>
+                        </button>
+                      </Tooltip>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -478,7 +525,18 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
                   }`}>
                     {req.badge}
                   </span>
-                  <span className="text-[11px] text-[#78716c] font-bold">{req.outpost}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[11px] text-[#78716c] font-bold">{req.outpost}</span>
+                    <Tooltip content="Delete Requisition" subcontent="Double Verification Required">
+                      <button
+                        type="button"
+                        onClick={() => setDeleteReqTarget(req)}
+                        className="p-1 rounded-lg text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] transition-colors cursor-pointer"
+                      >
+                        <span className="material-symbols-outlined text-sm">delete</span>
+                      </button>
+                    </Tooltip>
+                  </div>
                 </div>
                 <h3 className="font-headline font-bold text-sm sm:text-base text-[#1c1917] group-hover:text-[#b45309] transition-colors">
                   {req.title}
@@ -645,6 +703,30 @@ export const StaffPayrollView: React.FC<StaffPayrollViewProps> = ({ onShowToast 
           </div>
         </div>
       )}
+
+      {/* Double Verification Modal for Staff Termination */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deleteStaffTarget}
+        onClose={() => setDeleteStaffTarget(null)}
+        onConfirm={handleConfirmDeleteStaff}
+        itemName={deleteStaffTarget ? `${deleteStaffTarget.name} (${deleteStaffTarget.roleTitle})` : ''}
+        itemType="Staff Member Record"
+        itemSubdetails={deleteStaffTarget ? `Staff Code: ${deleteStaffTarget.staffCode} • Base Retainer: ₹${deleteStaffTarget.baseRetainer.toLocaleString('en-IN')} • Outpost: ${deleteStaffTarget.outpost}` : undefined}
+        warningNote="Terminating this staff member will immediately halt compensation disbursement, purge biometric attendance records, and revoke outpost access across all 6 metro terminals."
+        requireTyping={true}
+      />
+
+      {/* Double Verification Modal for Job Requisition Deletion */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deleteReqTarget}
+        onClose={() => setDeleteReqTarget(null)}
+        onConfirm={handleConfirmDeleteReq}
+        itemName={deleteReqTarget ? `${deleteReqTarget.title} (${deleteReqTarget.outpost})` : ''}
+        itemType="Job Requisition"
+        itemSubdetails={deleteReqTarget ? `Salary Band: ${deleteReqTarget.salaryBand} • ${deleteReqTarget.applicantsCount} active applicants` : undefined}
+        warningNote="Deleting this requisition will close the recruitment pipeline, reject active candidate submissions, and remove the listing from Indian culinary guild feeds."
+        requireTyping={true}
+      />
     </div>
   );
 };

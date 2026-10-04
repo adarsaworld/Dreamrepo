@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { INVENTORY_ITEMS } from '../data/mockData';
 import { InventoryItem, InwardStockRecord, PredictiveParItem, PurchaseOrderRecord } from '../types';
 import { INITIAL_PREDICTIVE_PAR_ITEMS, INITIAL_PURCHASE_ORDERS } from '../data/enterpriseData';
+import { Tooltip } from './Tooltip';
+import { DoubleDeleteConfirmModal } from './DoubleDeleteConfirmModal';
 
 interface InventorySupplyViewProps {
   onShowToast: (title: string, desc: string, type?: 'success' | 'warning' | 'info') => void;
@@ -12,10 +14,36 @@ export const InventorySupplyView: React.FC<InventorySupplyViewProps> = ({ onShow
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [search, setSearch] = useState('');
   
+  // Double Verification Delete Targets
+  const [deleteStockTarget, setDeleteStockTarget] = useState<InventoryItem | null>(null);
+  const [deletePOTarget, setDeletePOTarget] = useState<PurchaseOrderRecord | null>(null);
+
   // Predictive Supply Chain & Auto PO State
   const [predictiveItems, setPredictiveItems] = useState<PredictiveParItem[]>(INITIAL_PREDICTIVE_PAR_ITEMS);
   const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrderRecord[]>(INITIAL_PURCHASE_ORDERS);
   const [activeInventoryTab, setActiveInventoryTab] = useState<'inventory' | 'predictive_po'>('inventory');
+
+  const handleConfirmDeleteStock = () => {
+    if (!deleteStockTarget) return;
+    setItems((prev) => prev.filter((i) => i.id !== deleteStockTarget.id));
+    onShowToast(
+      'Stock Asset Written Off & Deleted',
+      `Permanently purged ${deleteStockTarget.name} (${deleteStockTarget.category}) from national supply ledger.`,
+      'warning'
+    );
+    setDeleteStockTarget(null);
+  };
+
+  const handleConfirmDeletePO = () => {
+    if (!deletePOTarget) return;
+    setPurchaseOrders((prev) => prev.filter((p) => p.id !== deletePOTarget.id));
+    onShowToast(
+      'Purchase Order Cancelled & Deleted',
+      `Voided PO ${deletePOTarget.poNumber} for ${deletePOTarget.supplierName}.`,
+      'info'
+    );
+    setDeletePOTarget(null);
+  };
   
   // Add Stock Modal State
   const [isAddStockOpen, setIsAddStockOpen] = useState(false);
@@ -624,6 +652,7 @@ export const InventorySupplyView: React.FC<InventorySupplyViewProps> = ({ onShow
                     <th className="py-2.5 px-4 text-right">Estimated Cost</th>
                     <th className="py-2.5 px-4">Dispatch Channel</th>
                     <th className="py-2.5 px-4">Status</th>
+                    <th className="py-2.5 px-4 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#eee7da]">
@@ -644,6 +673,17 @@ export const InventorySupplyView: React.FC<InventorySupplyViewProps> = ({ onShow
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ecfdf5] text-[#065f46] border border-[#a7f3d0]">
                           {po.status}
                         </span>
+                      </td>
+                      <td className="py-2.5 px-4 text-right">
+                        <Tooltip content="Cancel Purchase Order" subcontent="Double Verification Required">
+                          <button
+                            type="button"
+                            onClick={() => setDeletePOTarget(po)}
+                            className="p-1 rounded-lg text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] transition-colors cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-sm">delete</span>
+                          </button>
+                        </Tooltip>
                       </td>
                     </tr>
                   ))}
@@ -761,35 +801,51 @@ export const InventorySupplyView: React.FC<InventorySupplyViewProps> = ({ onShow
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        {/* Quick stock add (+1 or +5) */}
-                        <button
-                          type="button"
-                          onClick={(e) => handleQuickAdd(item.id, item.unit === 'kg' ? 2 : item.unit === 'bottles' ? 6 : 5, e)}
-                          title={`Quick Add +${item.unit === 'kg' ? 2 : item.unit === 'bottles' ? 6 : 5} ${item.unit}`}
-                          className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#ecfdf5] text-[#047857] font-mono text-xs font-bold border border-[#e8decb] hover:border-[#a7f3d0] transition-all cursor-pointer shadow-xs"
-                        >
-                          +{item.unit === 'kg' ? 2 : item.unit === 'bottles' ? 6 : 5}
-                        </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        {/* Quick stock add */}
+                        <Tooltip content={`Quick Add +${item.unit === 'kg' ? 2 : item.unit === 'bottles' ? 6 : 5} ${item.unit}`} subcontent="Instant Ledger Increment">
+                          <button
+                            type="button"
+                            onClick={(e) => handleQuickAdd(item.id, item.unit === 'kg' ? 2 : item.unit === 'bottles' ? 6 : 5, e)}
+                            className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#ecfdf5] text-[#047857] font-mono text-xs font-bold border border-[#e8decb] hover:border-[#a7f3d0] transition-all cursor-pointer shadow-xs"
+                          >
+                            +{item.unit === 'kg' ? 2 : item.unit === 'bottles' ? 6 : 5}
+                          </button>
+                        </Tooltip>
 
                         {/* Open Modal with this item */}
-                        <button
-                          type="button"
-                          onClick={() => handleOpenAddStockModalForItem(item.id)}
-                          className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] hover:bg-[#fde68a] text-[#92400e] font-bold text-xs border border-[#fde68a] transition-all cursor-pointer flex items-center gap-1 shadow-xs"
-                        >
-                          <span className="material-symbols-outlined text-xs">add</span>
-                          <span>Add Stock</span>
-                        </button>
+                        <Tooltip content="Inward Verified Batch" subcontent="Record Invoice & Origin">
+                          <button
+                            type="button"
+                            onClick={() => handleOpenAddStockModalForItem(item.id)}
+                            className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] hover:bg-[#fde68a] text-[#92400e] font-bold text-xs border border-[#fde68a] transition-all cursor-pointer flex items-center gap-1 shadow-xs"
+                          >
+                            <span className="material-symbols-outlined text-xs">add</span>
+                            <span>Add Stock</span>
+                          </button>
+                        </Tooltip>
 
                         {/* Order PO */}
-                        <button
-                          type="button"
-                          onClick={() => handleOrderReplenish(item.name)}
-                          className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#faf8f5] text-[#78716c] hover:text-[#1c1917] font-bold text-xs border border-[#e8decb] transition-all cursor-pointer shadow-xs"
-                        >
-                          PO
-                        </button>
+                        <Tooltip content="Replenish via Supplier" subcontent="Draft Purchase Requisition">
+                          <button
+                            type="button"
+                            onClick={() => handleOrderReplenish(item.name)}
+                            className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#faf8f5] text-[#78716c] hover:text-[#1c1917] font-bold text-xs border border-[#e8decb] transition-all cursor-pointer shadow-xs"
+                          >
+                            PO
+                          </button>
+                        </Tooltip>
+
+                        {/* Delete / Write-off Stock Asset */}
+                        <Tooltip content="Write-off / Delete Asset" subcontent="Double Verification Required">
+                          <button
+                            type="button"
+                            onClick={() => setDeleteStockTarget(item)}
+                            className="p-1.5 rounded-lg text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] border border-transparent hover:border-[#fecaca] transition-all cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-base">delete</span>
+                          </button>
+                        </Tooltip>
                       </div>
                     </td>
                   </tr>
@@ -1122,6 +1178,30 @@ export const InventorySupplyView: React.FC<InventorySupplyViewProps> = ({ onShow
           </div>
         </div>
       )}
+
+      {/* Double Verification Modal for Stock Asset Deletion / Write-Off */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deleteStockTarget}
+        onClose={() => setDeleteStockTarget(null)}
+        onConfirm={handleConfirmDeleteStock}
+        itemName={deleteStockTarget ? `${deleteStockTarget.name} (${deleteStockTarget.category})` : ''}
+        itemType="Inventory Stock Asset"
+        itemSubdetails={deleteStockTarget ? `Stock on Hand: ${deleteStockTarget.stockOnHand} ${deleteStockTarget.unit} • Origin: ${deleteStockTarget.origin}` : undefined}
+        warningNote="Writing off this inventory item permanently purges its record from all metro cold rooms and write-downs the asset valuation in the corporate trial balance."
+        requireTyping={true}
+      />
+
+      {/* Double Verification Modal for Purchase Order Cancellation */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deletePOTarget}
+        onClose={() => setDeletePOTarget(null)}
+        onConfirm={handleConfirmDeletePO}
+        itemName={deletePOTarget ? `PO #${deletePOTarget.poNumber} (${deletePOTarget.supplierName})` : ''}
+        itemType="Purchase Order"
+        itemSubdetails={deletePOTarget ? `Estimated Value: ₹${deletePOTarget.estimatedCost.toLocaleString('en-IN')} • Outpost: ${deletePOTarget.outpost}` : undefined}
+        warningNote="Cancelling this purchase order revokes the automated supply dispatch, notifies the vendor via webhook/WhatsApp, and clears the par replenishment buffer."
+        requireTyping={true}
+      />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationTab } from '../types';
 import { PWAInstallButton } from './PWAInstallButton';
+import { Tooltip } from './Tooltip';
 
 interface SidebarProps {
   currentTab: NavigationTab;
@@ -154,43 +155,50 @@ export const Sidebar: React.FC<SidebarProps> = ({
             {navItems.map((item) => {
               const isActive = currentTab === item.id;
               return (
-                <button
+                <Tooltip
                   key={item.id}
-                  onClick={() => {
-                    onTabChange(item.id);
-                    onCloseMobile();
-                  }}
-                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-200 group text-left cursor-pointer ${
-                    isActive
-                      ? 'bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] text-[#92400e] font-bold shadow-[0_2px_12px_rgba(245,158,11,0.25)] border border-[#fde68a] translate-x-1'
-                      : 'text-[#57534e] hover:bg-[#f5efe4] hover:text-[#1c1917] hover:translate-x-0.5'
-                  }`}
+                  content={item.label}
+                  subcontent={item.sublabel}
+                  position="right"
+                  className="w-full block"
                 >
-                  <span
-                    className={`material-symbols-outlined text-xl transition-transform duration-200 group-hover:scale-110 ${
-                      isActive ? 'text-[#b45309]' : 'text-[#78716c] group-hover:text-[#b45309]'
+                  <button
+                    onClick={() => {
+                      onTabChange(item.id);
+                      onCloseMobile();
+                    }}
+                    className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-200 group text-left cursor-pointer ${
+                      isActive
+                        ? 'bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] text-[#92400e] font-bold shadow-[0_2px_12px_rgba(245,158,11,0.25)] border border-[#fde68a] translate-x-1'
+                        : 'text-[#57534e] hover:bg-[#f5efe4] hover:text-[#1c1917] hover:translate-x-0.5'
                     }`}
                   >
-                    {item.icon}
-                  </span>
-                  <div className="flex flex-col flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold truncate leading-tight">
-                        {item.label}
-                      </span>
-                      {item.badge && !isActive && (
-                        <span className="h-2 w-2 rounded-full bg-[#dc2626] animate-pulse" />
-                      )}
-                    </div>
                     <span
-                      className={`text-[11px] truncate mt-0.5 ${
-                        isActive ? 'text-[#b45309]/80' : 'text-[#78716c]'
+                      className={`material-symbols-outlined text-xl transition-transform duration-200 group-hover:scale-110 ${
+                        isActive ? 'text-[#b45309]' : 'text-[#78716c] group-hover:text-[#b45309]'
                       }`}
                     >
-                      {item.sublabel}
+                      {item.icon}
                     </span>
-                  </div>
-                </button>
+                    <div className="flex flex-col flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold truncate leading-tight">
+                          {item.label}
+                        </span>
+                        {item.badge && !isActive && (
+                          <span className="h-2 w-2 rounded-full bg-[#dc2626] animate-pulse" />
+                        )}
+                      </div>
+                      <span
+                        className={`text-[11px] truncate mt-0.5 ${
+                          isActive ? 'text-[#b45309]/80' : 'text-[#78716c]'
+                        }`}
+                      >
+                        {item.sublabel}
+                      </span>
+                    </div>
+                  </button>
+                </Tooltip>
               );
             })}
           </nav>

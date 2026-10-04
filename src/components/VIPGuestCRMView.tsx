@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { VIPGuestRecord, AllergenHazard } from '../types';
 import { INITIAL_VIP_GUESTS, COMMON_ALLERGEN_HAZARDS } from '../data/enterpriseData';
+import { Tooltip } from './Tooltip';
+import { DoubleDeleteConfirmModal } from './DoubleDeleteConfirmModal';
 
 interface VIPGuestCRMViewProps {
   onShowToast: (title: string, desc: string, type?: 'success' | 'warning' | 'info') => void;
@@ -14,6 +16,21 @@ export const VIPGuestCRMView: React.FC<VIPGuestCRMViewProps> = ({ onShowToast })
   const [searchQuery, setSearchQuery] = useState('');
   const [tierFilter, setTierFilter] = useState<string>('all');
   const [selectedGuest, setSelectedGuest] = useState<VIPGuestRecord | null>(null);
+
+  // Double Verification Delete Target
+  const [deleteGuestTarget, setDeleteGuestTarget] = useState<VIPGuestRecord | null>(null);
+
+  const handleConfirmDeleteGuest = () => {
+    if (!deleteGuestTarget) return;
+    setGuests((prev) => prev.filter((g) => g.id !== deleteGuestTarget.id));
+    onShowToast(
+      'VIP Patron Dossier Deleted',
+      `Permanently purged ${deleteGuestTarget.salutation} ${deleteGuestTarget.name} from the national luxury ledger.`,
+      'warning'
+    );
+    setDeleteGuestTarget(null);
+    setSelectedGuest(null);
+  };
 
   // New Guest Modal
   const [isAddGuestOpen, setIsAddGuestOpen] = useState(false);
@@ -248,10 +265,26 @@ export const VIPGuestCRMView: React.FC<VIPGuestCRMViewProps> = ({ onShowToast })
 
                 <div className="pt-2 border-t border-[#f0ece1] flex items-center justify-between text-xs text-[#78716c]">
                   <span>Last Visit: <strong className="text-[#1c1917]">{guest.lastVisitDate}</strong></span>
-                  <span className="text-[#b45309] font-bold group-hover:underline flex items-center gap-0.5">
-                    <span>Full Dossier</span>
-                    <span className="material-symbols-outlined text-xs">arrow_forward</span>
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <Tooltip content="Inspect VIP Dossier" subcontent="Cross-Metro History">
+                      <span className="text-[#b45309] font-bold group-hover:underline flex items-center gap-0.5 cursor-pointer">
+                        <span>Full Dossier</span>
+                        <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                      </span>
+                    </Tooltip>
+                    <Tooltip content="Delete VIP Dossier" subcontent="Double Verification Required">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleteGuestTarget(guest);
+                        }}
+                        className="p-1 rounded-lg text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] transition-colors cursor-pointer"
+                      >
+                        <span className="material-symbols-outlined text-sm">delete</span>
+                      </button>
+                    </Tooltip>
+                  </div>
                 </div>
               </div>
             ))}
@@ -411,24 +444,37 @@ export const VIPGuestCRMView: React.FC<VIPGuestCRMViewProps> = ({ onShowToast })
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#f0ece1]">
-              <button
-                type="button"
-                onClick={() => setSelectedGuest(null)}
-                className="px-4 py-2 rounded-xl bg-[#faf8f5] text-xs font-bold text-[#57534e]"
-              >
-                Close Dossier
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  onShowToast('Table Pre-Assigned', `Reserved ${selectedGuest.preferredTable} for ${selectedGuest.name}.`, 'success');
-                  setSelectedGuest(null);
-                }}
-                className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#b45309] to-[#ea580c] text-white text-xs font-bold shadow-md hover:brightness-110"
-              >
-                Reserve Preferred Table
-              </button>
+            <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#f0ece1]">
+              <Tooltip content="Permanently Purge Dossier" subcontent="Double Verification Required">
+                <button
+                  type="button"
+                  onClick={() => setDeleteGuestTarget(selectedGuest)}
+                  className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#fef2f2] text-[#dc2626] text-xs font-bold border border-[#fecaca] transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <span className="material-symbols-outlined text-sm">delete</span>
+                  <span>Delete Dossier</span>
+                </button>
+              </Tooltip>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedGuest(null)}
+                  className="px-4 py-2 rounded-xl bg-[#faf8f5] text-xs font-bold text-[#57534e]"
+                >
+                  Close Dossier
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onShowToast('Table Pre-Assigned', `Reserved ${selectedGuest.preferredTable} for ${selectedGuest.name}.`, 'success');
+                    setSelectedGuest(null);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-[#b45309] to-[#ea580c] text-white text-xs font-bold shadow-md hover:brightness-110"
+                >
+                  Reserve Preferred Table
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -563,6 +609,18 @@ export const VIPGuestCRMView: React.FC<VIPGuestCRMViewProps> = ({ onShowToast })
           </div>
         </div>
       )}
+
+      {/* Double Verification Modal for VIP Guest Deletion */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deleteGuestTarget}
+        onClose={() => setDeleteGuestTarget(null)}
+        onConfirm={handleConfirmDeleteGuest}
+        itemName={deleteGuestTarget ? `${deleteGuestTarget.salutation} ${deleteGuestTarget.name}` : ''}
+        itemType="VIP Guest Dossier"
+        itemSubdetails={deleteGuestTarget ? `Tier: ${deleteGuestTarget.vipTier} • Lifetime Spend: ₹${(deleteGuestTarget.lifetimeSpend / 100000).toFixed(1)} Lakhs • Outpost: ${deleteGuestTarget.primaryOutpost}` : undefined}
+        warningNote="Purging this guest profile permanently removes their concierge notes, allergen sensitivity flags, table preferences, and lifetime loyalty tier from all 6 metropolitan outposts."
+        requireTyping={true}
+      />
     </div>
   );
 };

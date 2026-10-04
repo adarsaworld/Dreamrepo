@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { UserProfileData, TeamMember } from '../types';
 import { INITIAL_USER_PROFILE, INITIAL_TEAM_MEMBERS } from '../data/mockData';
+import { Tooltip } from './Tooltip';
+import { DoubleDeleteConfirmModal } from './DoubleDeleteConfirmModal';
 
 interface UserProfileViewProps {
   onShowToast: (title: string, desc: string, type?: 'success' | 'warning' | 'info') => void;
@@ -1031,41 +1033,44 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onShowToast })
                         <div className="flex items-center justify-end gap-2">
                           {/* Ban / Unban Button */}
                           {member.status === 'banned' ? (
-                            <button
-                              type="button"
-                              onClick={() => handleUnbanEmployee(member)}
-                              className="px-3 py-1.5 rounded-xl bg-[#ecfdf5] dark:bg-[#064e3b]/60 hover:bg-[#047857] text-[#065f46] dark:text-[#6ee7b7] hover:text-white font-bold text-xs border border-[#a7f3d0] dark:border-[#065f46] transition-all cursor-pointer flex items-center gap-1 shadow-xs"
-                              title="Reinstate Employee Access"
-                            >
-                              <span className="material-symbols-outlined text-xs">lock_open</span>
-                              <span>Unban</span>
-                            </button>
+                            <Tooltip content="Reinstate Access" subcontent="Unlock POS & Biometrics">
+                              <button
+                                type="button"
+                                onClick={() => handleUnbanEmployee(member)}
+                                className="px-3 py-1.5 rounded-xl bg-[#ecfdf5] dark:bg-[#064e3b]/60 hover:bg-[#047857] text-[#065f46] dark:text-[#6ee7b7] hover:text-white font-bold text-xs border border-[#a7f3d0] dark:border-[#065f46] transition-all cursor-pointer flex items-center gap-1 shadow-xs"
+                              >
+                                <span className="material-symbols-outlined text-xs">lock_open</span>
+                                <span>Unban</span>
+                              </button>
+                            </Tooltip>
                           ) : (
-                            <button
-                              type="button"
-                              onClick={() => setBanModalTarget(member)}
-                              className="px-3 py-1.5 rounded-xl bg-[#fef2f2] dark:bg-[#450a0a] hover:bg-[#dc2626] text-[#b91c1c] dark:text-[#fca5a5] hover:text-white font-bold text-xs border border-[#fecaca] dark:border-[#7f1d1d] transition-all cursor-pointer flex items-center gap-1 shadow-xs"
-                              title="Ban and Revoke Fleet Access"
-                            >
-                              <span className="material-symbols-outlined text-xs">block</span>
-                              <span>Ban</span>
-                            </button>
+                            <Tooltip content="Ban Employee" subcontent="Suspends POS & Shifts">
+                              <button
+                                type="button"
+                                onClick={() => setBanModalTarget(member)}
+                                className="px-3 py-1.5 rounded-xl bg-[#fef2f2] dark:bg-[#450a0a] hover:bg-[#dc2626] text-[#b91c1c] dark:text-[#fca5a5] hover:text-white font-bold text-xs border border-[#fecaca] dark:border-[#7f1d1d] transition-all cursor-pointer flex items-center gap-1 shadow-xs"
+                              >
+                                <span className="material-symbols-outlined text-xs">block</span>
+                                <span>Ban</span>
+                              </button>
+                            </Tooltip>
                           )}
 
-                          {/* Remove Employee Button */}
-                          <button
-                            type="button"
-                            onClick={() => setRemoveConfirmTarget(member)}
-                            className={`px-3 py-1.5 rounded-xl hover:bg-[#dc2626] hover:text-white font-bold text-xs border hover:border-transparent transition-all cursor-pointer flex items-center gap-1 shadow-xs ${
-                              isDarkMode
-                                ? 'bg-[#15171e] text-[#9ca3af] border-[#384152]'
-                                : 'bg-[#faf8f5] text-[#78716c] border-[#e8decb]'
-                            }`}
-                            title="Remove Employee from Roster"
-                          >
-                            <span className="material-symbols-outlined text-xs">delete</span>
-                            <span className="hidden sm:inline">Remove</span>
-                          </button>
+                          {/* Remove Employee Button (Requires Double Verification) */}
+                          <Tooltip content="Delete Employee" subcontent="Double Verification Required">
+                            <button
+                              type="button"
+                              onClick={() => setRemoveConfirmTarget(member)}
+                              className={`px-3 py-1.5 rounded-xl hover:bg-[#dc2626] hover:text-white font-bold text-xs border hover:border-transparent transition-all cursor-pointer flex items-center gap-1 shadow-xs ${
+                                isDarkMode
+                                  ? 'bg-[#15171e] text-[#f87171] border-[#7f1d1d]/60 hover:bg-[#dc2626]'
+                                  : 'bg-[#faf8f5] text-[#b91c1c] border-[#fecaca] hover:bg-[#dc2626]'
+                              }`}
+                            >
+                              <span className="material-symbols-outlined text-xs">delete</span>
+                              <span className="hidden sm:inline">Remove</span>
+                            </button>
+                          </Tooltip>
                         </div>
                       </td>
                     </tr>
@@ -1753,49 +1758,18 @@ export const UserProfileView: React.FC<UserProfileViewProps> = ({ onShowToast })
         </div>
       )}
 
-      {/* MODAL 3: Remove Employee Confirmation */}
-      {removeConfirmTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in">
-          <div className={`border rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 relative ${theme.card}`}>
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-[#fef2f2] dark:bg-[#450a0a] text-[#dc2626] flex items-center justify-center shrink-0 border border-[#fecaca] dark:border-[#7f1d1d]">
-                <span className="material-symbols-outlined text-2xl">delete_forever</span>
-              </div>
-              <div>
-                <h3 className={`font-headline font-bold text-base ${theme.heading}`}>
-                  Remove from Roster?
-                </h3>
-                <p className={`text-xs ${theme.subtext}`}>
-                  Permanently remove <strong className={theme.heading}>{removeConfirmTarget.name}</strong> from team records.
-                </p>
-              </div>
-            </div>
-
-            <p className={`text-xs leading-relaxed ${theme.bodyText}`}>
-              This action terminates their fleet record in your direct report ledger. This cannot be undone.
-            </p>
-
-            <div className={`flex items-center justify-end gap-2.5 pt-2 border-t ${theme.subtleBorder}`}>
-              <button
-                type="button"
-                onClick={() => setRemoveConfirmTarget(null)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold cursor-pointer ${
-                  isDarkMode ? 'bg-[#1a1d26] hover:bg-[#232834] text-[#9ca3af]' : 'bg-[#faf8f5] hover:bg-[#f4eee2] text-[#57534e]'
-                }`}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleConfirmRemove}
-                className="px-4 py-2 rounded-xl bg-[#dc2626] hover:bg-[#b91c1c] text-white text-xs font-bold shadow-md cursor-pointer"
-              >
-                Remove Employee
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* MODAL 3: Double Verification Remove Employee Modal */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!removeConfirmTarget}
+        onClose={() => setRemoveConfirmTarget(null)}
+        onConfirm={handleConfirmRemove}
+        itemName={removeConfirmTarget ? `${removeConfirmTarget.name} (${removeConfirmTarget.roleTitle})` : ''}
+        itemType="Employee Roster Record"
+        itemSubdetails={removeConfirmTarget ? `Employee ID: ${removeConfirmTarget.employeeId} • Outpost: ${removeConfirmTarget.outpost}` : undefined}
+        warningNote="Removing this employee permanently purges their credential profile from the executive ledger, revokes digital POS privileges, and suspends shift assignment."
+        isDarkMode={isDarkMode}
+        requireTyping={true}
+      />
     </div>
   );
 };

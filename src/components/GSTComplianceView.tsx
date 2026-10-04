@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { GSTInvoice, TDSRecord } from '../types';
 import { INITIAL_GST_INVOICES, INITIAL_TDS_RECORDS } from '../data/enterpriseData';
+import { Tooltip } from './Tooltip';
+import { DoubleDeleteConfirmModal } from './DoubleDeleteConfirmModal';
 
 interface GSTComplianceViewProps {
   onShowToast: (title: string, desc: string, type?: 'success' | 'warning' | 'info') => void;
@@ -12,6 +14,33 @@ export const GSTComplianceView: React.FC<GSTComplianceViewProps> = ({ onShowToas
   const [tdsRecords, setTdsRecords] = useState<TDSRecord[]>(INITIAL_TDS_RECORDS);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedInvoice, setSelectedInvoice] = useState<GSTInvoice | null>(null);
+
+  // Double Verification Delete Target
+  const [deleteInvoiceTarget, setDeleteInvoiceTarget] = useState<GSTInvoice | null>(null);
+  const [deleteTDSTarget, setDeleteTDSTarget] = useState<TDSRecord | null>(null);
+
+  const handleConfirmDeleteInvoice = () => {
+    if (!deleteInvoiceTarget) return;
+    setInvoices((prev) => prev.filter((i) => i.id !== deleteInvoiceTarget.id));
+    onShowToast(
+      'GST Tax Invoice Voided & Purged',
+      `Voided invoice ${deleteInvoiceTarget.invoiceNumber} for ${deleteInvoiceTarget.customerName} (₹${deleteInvoiceTarget.totalAmount.toLocaleString('en-IN')}).`,
+      'warning'
+    );
+    setDeleteInvoiceTarget(null);
+    setSelectedInvoice(null);
+  };
+
+  const handleConfirmDeleteTDS = () => {
+    if (!deleteTDSTarget) return;
+    setTdsRecords((prev) => prev.filter((t) => t.id !== deleteTDSTarget.id));
+    onShowToast(
+      'TDS Withholding Entry Voided',
+      `Struck out Section ${deleteTDSTarget.section} withholding record for ${deleteTDSTarget.beneficiaryName} (PAN: ${deleteTDSTarget.panMasked}).`,
+      'warning'
+    );
+    setDeleteTDSTarget(null);
+  };
 
   // New Invoice Generator Modal
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
@@ -286,14 +315,28 @@ export const GSTComplianceView: React.FC<GSTComplianceViewProps> = ({ onShowToas
                     </td>
 
                     <td className="py-3.5 px-6 text-right">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedInvoice(inv)}
-                        className="px-3 py-1 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#047857] font-bold text-xs border border-[#e8decb] transition-colors cursor-pointer inline-flex items-center gap-1 shadow-xs"
-                      >
-                        <span className="material-symbols-outlined text-xs">qr_code_2</span>
-                        <span>View IRN</span>
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <Tooltip content="View IRN Details" subcontent="64-Char Hash & QR">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedInvoice(inv)}
+                            className="px-3 py-1 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#047857] font-bold text-xs border border-[#e8decb] transition-colors cursor-pointer inline-flex items-center gap-1 shadow-xs"
+                          >
+                            <span className="material-symbols-outlined text-xs">qr_code_2</span>
+                            <span>View IRN</span>
+                          </button>
+                        </Tooltip>
+
+                        <Tooltip content="Void & Delete Invoice" subcontent="Double Verification Required">
+                          <button
+                            type="button"
+                            onClick={() => setDeleteInvoiceTarget(inv)}
+                            className="p-1.5 rounded-xl text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] border border-transparent hover:border-[#fecaca] transition-all cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-sm">delete</span>
+                          </button>
+                        </Tooltip>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -410,6 +453,7 @@ export const GSTComplianceView: React.FC<GSTComplianceViewProps> = ({ onShowToas
                     <th className="py-3 px-4 text-right">TDS Withheld</th>
                     <th className="py-3 px-4 text-right">Net Disbursed</th>
                     <th className="py-3 px-4">Challan BSR Status</th>
+                    <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#eee7da]">
@@ -434,6 +478,17 @@ export const GSTComplianceView: React.FC<GSTComplianceViewProps> = ({ onShowToas
                         <span className="px-2 py-0.2 rounded-full text-[9px] font-bold bg-[#ecfdf5] text-[#065f46]">
                           {t.depositStatus}
                         </span>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <Tooltip content="Void & Delete TDS Entry" subcontent="Double Verification Required">
+                          <button
+                            type="button"
+                            onClick={() => setDeleteTDSTarget(t)}
+                            className="p-1.5 rounded-xl text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] border border-transparent hover:border-[#fecaca] transition-all cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-sm">delete</span>
+                          </button>
+                        </Tooltip>
                       </td>
                     </tr>
                   ))}
@@ -532,16 +587,28 @@ export const GSTComplianceView: React.FC<GSTComplianceViewProps> = ({ onShowToas
             </div>
 
             <div className="flex items-center justify-between pt-2">
-              <button
-                type="button"
-                onClick={() => {
-                  navigator.clipboard.writeText(selectedInvoice.irnNumber);
-                  onShowToast('IRN Copied', 'Copied 64-character IRN hash to clipboard.', 'success');
-                }}
-                className="px-4 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#b45309] font-bold text-xs border border-[#e8decb] cursor-pointer"
-              >
-                Copy IRN
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(selectedInvoice.irnNumber);
+                    onShowToast('IRN Copied', 'Copied 64-character IRN hash to clipboard.', 'success');
+                  }}
+                  className="px-4 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#b45309] font-bold text-xs border border-[#e8decb] cursor-pointer"
+                >
+                  Copy IRN
+                </button>
+                <Tooltip content="Void & Cancel Invoice" subcontent="Double Verification Required">
+                  <button
+                    type="button"
+                    onClick={() => setDeleteInvoiceTarget(selectedInvoice)}
+                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#fef2f2] text-[#dc2626] font-bold text-xs border border-[#fecaca] cursor-pointer flex items-center gap-1"
+                  >
+                    <span className="material-symbols-outlined text-sm">delete</span>
+                    <span>Void Invoice</span>
+                  </button>
+                </Tooltip>
+              </div>
 
               <button
                 type="button"
@@ -693,6 +760,30 @@ export const GSTComplianceView: React.FC<GSTComplianceViewProps> = ({ onShowToas
           </div>
         </div>
       )}
+
+      {/* Double Verification Modal for Invoice Voiding */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deleteInvoiceTarget}
+        onClose={() => setDeleteInvoiceTarget(null)}
+        onConfirm={handleConfirmDeleteInvoice}
+        itemName={deleteInvoiceTarget ? `${deleteInvoiceTarget.invoiceNumber} (${deleteInvoiceTarget.customerName})` : ''}
+        itemType="GST Tax Invoice"
+        itemSubdetails={deleteInvoiceTarget ? `Total Amount: ₹${deleteInvoiceTarget.totalAmount.toLocaleString('en-IN')} • Payment: ${deleteInvoiceTarget.paymentMethod} • IRN: ${deleteInvoiceTarget.irnNumber.slice(0, 16)}...` : undefined}
+        warningNote="Voiding this invoice will permanently strike it from the active GSTR-1 outward supply ledger, invalidate the 64-character IRN with the tax gateway, and post a credit reconciliation note."
+        requireTyping={true}
+      />
+
+      {/* Double Verification Modal for TDS Withholding Voiding */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deleteTDSTarget}
+        onClose={() => setDeleteTDSTarget(null)}
+        onConfirm={handleConfirmDeleteTDS}
+        itemName={deleteTDSTarget ? `${deleteTDSTarget.beneficiaryName} (Sec ${deleteTDSTarget.section})` : ''}
+        itemType="Income Tax TDS Record"
+        itemSubdetails={deleteTDSTarget ? `PAN: ${deleteTDSTarget.panMasked} • Gross: ₹${deleteTDSTarget.grossDisbursement.toLocaleString('en-IN')} • TDS: ₹${deleteTDSTarget.tdsDeducted.toLocaleString('en-IN')} • Challan: ${deleteTDSTarget.challanBSR}` : undefined}
+        warningNote="Voiding this TDS withholding record removes it from the quarterly Form 24Q/26Q generation batch and requires manual reconciliation of the tax challan."
+        requireTyping={true}
+      />
     </div>
   );
 };

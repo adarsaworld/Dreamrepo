@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { UserRole, RolePermission, SecurityAuditEntry } from '../types';
 import { ROLE_PERMISSIONS, INITIAL_SECURITY_AUDIT_LOGS } from '../data/enterpriseData';
+import { Tooltip } from './Tooltip';
+import { DoubleDeleteConfirmModal } from './DoubleDeleteConfirmModal';
 
 interface AuditSecurityViewProps {
   currentRole: UserRole;
@@ -18,6 +20,23 @@ export const AuditSecurityView: React.FC<AuditSecurityViewProps> = ({
   const [severityFilter, setSeverityFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAuditLog, setSelectedAuditLog] = useState<SecurityAuditEntry | null>(null);
+
+  // Double Verification Delete Target
+  const [deleteLogTarget, setDeleteLogTarget] = useState<SecurityAuditEntry | null>(null);
+
+  const handleConfirmDeleteLog = () => {
+    if (!deleteLogTarget) return;
+    setAuditLogs((prev) => prev.filter((l) => l.id !== deleteLogTarget.id));
+    onShowToast(
+      'Audit Record Purged from Active View',
+      `Permanently purged audit entry ${deleteLogTarget.id} (${deleteLogTarget.action}).`,
+      'warning'
+    );
+    setDeleteLogTarget(null);
+    if (selectedAuditLog?.id === deleteLogTarget.id) {
+      setSelectedAuditLog(null);
+    }
+  };
 
   const roles: Array<{ id: UserRole; label: string; badge: string; color: string }> = [
     {
@@ -203,15 +222,15 @@ export const AuditSecurityView: React.FC<AuditSecurityViewProps> = ({
                     <th className="py-3 px-4">Action Executed</th>
                     <th className="py-3 px-4">Executive Actor & Role</th>
                     <th className="py-3 px-4">Severity</th>
-                    <th className="py-3 px-6 text-right">Cryptographic Stamp</th>
+                    <th className="py-3 px-4">Cryptographic Stamp</th>
+                    <th className="py-3 px-6 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#eee7da]">
                   {filteredLogs.map((log) => (
                     <tr
                       key={log.id}
-                      onClick={() => setSelectedAuditLog(log)}
-                      className="hover:bg-[#faf8f5] transition-colors cursor-pointer"
+                      className="hover:bg-[#faf8f5] transition-colors"
                     >
                       <td className="py-3.5 px-6">
                         <div className="font-mono font-bold text-xs text-[#1c1917]">{log.timestamp}</div>
@@ -244,11 +263,35 @@ export const AuditSecurityView: React.FC<AuditSecurityViewProps> = ({
                         </span>
                       </td>
 
-                      <td className="py-3.5 px-6 text-right">
-                        <div className="font-mono text-[10px] text-[#047857] truncate max-w-[160px] ml-auto">
+                      <td className="py-3.5 px-4">
+                        <div className="font-mono text-[10px] text-[#047857] truncate max-w-[140px]">
                           {log.hashSignature.slice(0, 16)}...
                         </div>
-                        <span className="text-[10px] text-[#78716c] block">Click for Verification</span>
+                        <span className="text-[10px] text-[#78716c] block">Tamper Evident</span>
+                      </td>
+
+                      <td className="py-3.5 px-6 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Tooltip content="Inspect SHA-256 proof signature & origin metadata" subcontent="Cryptographic Proof">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedAuditLog(log)}
+                              className="px-2.5 py-1 rounded-lg bg-[#faf8f5] hover:bg-[#f4eee2] text-[#1c1917] text-xs font-bold border border-[#e8decb] transition-colors cursor-pointer"
+                            >
+                              Verify
+                            </button>
+                          </Tooltip>
+
+                          <Tooltip content="Purge audit entry from active index" subcontent="Double Verification Required">
+                            <button
+                              type="button"
+                              onClick={() => setDeleteLogTarget(log)}
+                              className="p-1 rounded-lg text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] border border-transparent hover:border-[#fecaca] transition-all cursor-pointer"
+                            >
+                              <span className="material-symbols-outlined text-sm">delete</span>
+                            </button>
+                          </Tooltip>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -407,6 +450,22 @@ export const AuditSecurityView: React.FC<AuditSecurityViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Double Verification Modal for Security Audit Record Purge */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deleteLogTarget}
+        onClose={() => setDeleteLogTarget(null)}
+        onConfirm={handleConfirmDeleteLog}
+        itemName={deleteLogTarget ? `${deleteLogTarget.action} (${deleteLogTarget.actorName})` : ''}
+        itemType="Cryptographic Audit Entry"
+        itemSubdetails={
+          deleteLogTarget
+            ? `Timestamp: ${deleteLogTarget.timestamp} • Origin: ${deleteLogTarget.outpost} • Hash: ${deleteLogTarget.hashSignature.slice(0, 20)}...`
+            : undefined
+        }
+        warningNote="Purging this cryptographic log permanently removes its SHA-256 seal from the active session view and generates an internal audit pruning notice."
+        requireTyping={true}
+      />
     </div>
   );
 };

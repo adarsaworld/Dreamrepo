@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { LocationId } from '../types';
+import { Tooltip } from './Tooltip';
+import { DoubleDeleteConfirmModal } from './DoubleDeleteConfirmModal';
+
+interface FlavorPilot {
+  id: string;
+  name: string;
+  regionalHeritage: string;
+  dominantNotes: string[];
+  targetOutpost: string;
+  pilotStatus: 'In Tasting' | 'Approved' | 'Sensory Trial';
+  heatLevel: 'Mild' | 'Medium' | 'Royal Spice';
+  guestSatisfactionScore: number;
+}
 
 interface PreferredFlavorsViewProps {
   currentLocation: LocationId;
@@ -17,6 +30,52 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
     currentLocation === 'all' ? 'all' : currentLocation
   );
   const [secondsRefresh, setSecondsRefresh] = useState<number>(42);
+
+  // Flavor Innovation Pilot Roster & Double Verification Delete
+  const [flavorPilots, setFlavorPilots] = useState<FlavorPilot[]>([
+    {
+      id: 'pilot-1',
+      name: 'Smoked Kokum & Byadgi Chili A2 Ghee Confit',
+      regionalHeritage: 'Coastal Malabar / Konkan',
+      dominantNotes: ['Kokum Acidity', 'Byadgi Smoke', 'A2 Bilona Ghee'],
+      targetOutpost: 'Mumbai BKC Flagship',
+      pilotStatus: 'Sensory Trial',
+      heatLevel: 'Royal Spice',
+      guestSatisfactionScore: 94.8,
+    },
+    {
+      id: 'pilot-2',
+      name: 'Kashmiri Guchhi Morel & Anantnag Walnut Praline',
+      regionalHeritage: 'Kashmir Valley',
+      dominantNotes: ['Wild Morel Earthiness', 'Himalayan Walnut', 'Saffron Mote'],
+      targetOutpost: 'New Delhi Lutyens',
+      pilotStatus: 'Approved',
+      heatLevel: 'Mild',
+      guestSatisfactionScore: 98.2,
+    },
+    {
+      id: 'pilot-3',
+      name: 'Fermented Spiced Jamun & Darjeeling First Flush Glaze',
+      regionalHeritage: 'Bengal & Eastern Hills',
+      dominantNotes: ['Tart Jamun', 'First Flush Tannins', 'Star Anise'],
+      targetOutpost: 'Kolkata Park Street',
+      pilotStatus: 'In Tasting',
+      heatLevel: 'Mild',
+      guestSatisfactionScore: 91.5,
+    },
+  ]);
+  const [deletePilotTarget, setDeletePilotTarget] = useState<FlavorPilot | null>(null);
+
+  const handleConfirmDeletePilot = () => {
+    if (!deletePilotTarget) return;
+    setFlavorPilots((prev) => prev.filter((p) => p.id !== deletePilotTarget.id));
+    onShowToast(
+      'Flavor Innovation Profile Retired',
+      `Purged prototype "${deletePilotTarget.name}" from culinary research bench.`,
+      'warning'
+    );
+    setDeletePilotTarget(null);
+  };
 
   // Sync internal filter if header location changes
   useEffect(() => {
@@ -1021,17 +1080,131 @@ export const PreferredFlavorsView: React.FC<PreferredFlavorsViewProps> = ({
           </div>
 
           <div className="pt-1">
-            <button
-              onClick={() => onNavigateTab('menu-studio')}
-              className="w-full py-2.5 rounded-xl bg-[#faf8f5] text-[#1c1917] hover:text-[#b45309] hover:bg-[#f4eee2] text-xs font-bold flex items-center justify-center gap-2 transition-all border border-[#e8decb] hover:border-[#b45309]/30 cursor-pointer shadow-xs"
-              type="button"
-            >
-              <span className="material-symbols-outlined text-base">tune</span>
-              <span>Deploy Menu Studio Adjustments</span>
-            </button>
+            <Tooltip content="Adjust dish pricing, ingredients and staging in Menu Studio" subcontent="6-Branch Sync">
+              <button
+                onClick={() => onNavigateTab('menu-studio')}
+                className="w-full py-2.5 rounded-xl bg-[#faf8f5] text-[#1c1917] hover:text-[#b45309] hover:bg-[#f4eee2] text-xs font-bold flex items-center justify-center gap-2 transition-all border border-[#e8decb] hover:border-[#b45309]/30 cursor-pointer shadow-xs"
+                type="button"
+              >
+                <span className="material-symbols-outlined text-base">tune</span>
+                <span>Deploy Menu Studio Adjustments</span>
+              </button>
+            </Tooltip>
           </div>
         </div>
       </section>
+
+      {/* Flavor Innovation & Pilot Test Lab */}
+      <section className="bg-white border border-[#e8decb] rounded-2xl p-6 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#f0ece1]">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#b45309] text-xl">biotech</span>
+            <div>
+              <h3 className="font-headline font-bold text-base text-[#1c1917]">
+                Active Flavor Innovation & Pilot Test Roster
+              </h3>
+              <p className="text-xs text-[#57534e]">
+                Sensory trials, bespoke ingredient pairings, and executive tastings staged for menu induction.
+              </p>
+            </div>
+          </div>
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#fef3c7] text-[#92400e] border border-[#fde68a] self-start sm:self-auto">
+            {flavorPilots.length} Active Prototypes
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {flavorPilots.map((pilot) => (
+            <div
+              key={pilot.id}
+              className="p-5 rounded-xl bg-[#faf8f5] border border-[#e8decb] flex flex-col justify-between space-y-3 hover:border-[#b45309]/50 transition-all shadow-xs"
+            >
+              <div className="space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <span className="font-bold text-sm text-[#1c1917] leading-snug">
+                    {pilot.name}
+                  </span>
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 border ${
+                      pilot.pilotStatus === 'Approved'
+                        ? 'bg-[#ecfdf5] text-[#047857] border-[#a7f3d0]'
+                        : pilot.pilotStatus === 'Sensory Trial'
+                        ? 'bg-[#fef3c7] text-[#92400e] border-[#fde68a]'
+                        : 'bg-white text-[#78716c] border-[#e8decb]'
+                    }`}
+                  >
+                    {pilot.pilotStatus}
+                  </span>
+                </div>
+
+                <div className="text-[11px] text-[#78716c]">
+                  Heritage: <strong className="text-[#1c1917]">{pilot.regionalHeritage}</strong> • Outpost: <strong className="text-[#1c1917]">{pilot.targetOutpost}</strong>
+                </div>
+
+                <div className="flex flex-wrap gap-1 pt-1">
+                  {pilot.dominantNotes.map((note, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-white text-[#57534e] border border-[#e8decb]"
+                    >
+                      {note}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-between text-xs pt-1 text-[#57534e]">
+                  <span>Heat Profile: <strong className="text-[#b45309]">{pilot.heatLevel}</strong></span>
+                  <span className="font-mono font-bold text-[#047857]">
+                    {pilot.guestSatisfactionScore}% Palate Score
+                  </span>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-[#e8decb] flex items-center justify-between">
+                <Tooltip content="Promote recipe prototype directly into Menu Studio" subcontent="Multi-Branch Staging">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onShowToast('Pilot Promoted', `Pushed ${pilot.name} to Menu Studio for recipe cost breakdown.`);
+                      onNavigateTab('menu-studio');
+                    }}
+                    className="text-[#b45309] hover:text-[#92400e] text-xs font-bold flex items-center gap-1 cursor-pointer"
+                  >
+                    <span>To Menu Studio</span>
+                    <span className="material-symbols-outlined text-xs">arrow_forward</span>
+                  </button>
+                </Tooltip>
+
+                <Tooltip content="Retire & Delete Flavor Pilot" subcontent="Double Verification Required">
+                  <button
+                    type="button"
+                    onClick={() => setDeletePilotTarget(pilot)}
+                    className="p-1.5 rounded-xl text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] border border-transparent hover:border-[#fecaca] transition-all cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-sm">delete</span>
+                  </button>
+                </Tooltip>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Double Verification Modal for Flavor Pilot Deletion */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deletePilotTarget}
+        onClose={() => setDeletePilotTarget(null)}
+        onConfirm={handleConfirmDeletePilot}
+        itemName={deletePilotTarget ? deletePilotTarget.name : ''}
+        itemType="Flavor Innovation Pilot"
+        itemSubdetails={
+          deletePilotTarget
+            ? `Heritage: ${deletePilotTarget.regionalHeritage} • Outpost: ${deletePilotTarget.targetOutpost} • Status: ${deletePilotTarget.pilotStatus}`
+            : undefined
+        }
+        warningNote="Retiring this prototype permanently purges the tasting session notes, sensory feedback scores, and ingredient spice formulation from the culinary intelligence bench."
+        requireTyping={true}
+      />
     </div>
   );
 };

@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { LocationInfo, LocationId } from '../types';
 import { LOCATIONS, LIVE_ORDERS } from '../data/mockData';
+import { Tooltip } from './Tooltip';
+import { DoubleDeleteConfirmModal } from './DoubleDeleteConfirmModal';
+
+interface TableHold {
+  id: string;
+  tableNumber: string;
+  outpost: string;
+  reason: string;
+  heldBy: string;
+  duration: string;
+}
 
 interface BranchOverviewViewProps {
   currentLocation: LocationId;
@@ -20,6 +31,46 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
   const [isSyncing, setIsSyncing] = useState(false);
   const [broadcastPromptOpen, setBroadcastPromptOpen] = useState(false);
   const [broadcastMsg, setBroadcastMsg] = useState('Notice: Evening surge expected across all outposts at 19:30. Prioritize Sikandari Raan & Galouti restock.');
+
+  // Table Holds and Double Verification Delete
+  const [tableHolds, setTableHolds] = useState<TableHold[]>([
+    {
+      id: 'hold-1',
+      tableNumber: 'Table 14 (Royal Alcove)',
+      outpost: 'Mumbai BKC Flagship',
+      reason: 'Held for Chief Executive Delegation Dinner',
+      heldBy: 'General Manager R. Deshmukh',
+      duration: 'Until 21:00 IST',
+    },
+    {
+      id: 'hold-2',
+      tableNumber: 'Table 08 (Durbar Salon)',
+      outpost: 'New Delhi Lutyens',
+      reason: 'Sommelier Degustation Flight Preparation',
+      heldBy: 'Sommelier K. Bakshi',
+      duration: 'Until 20:30 IST',
+    },
+    {
+      id: 'hold-3',
+      tableNumber: 'Table 22 (Terrace View)',
+      outpost: 'Bengaluru Indiranagar',
+      reason: 'Monsoon Windbreak Weather Safety Hold',
+      heldBy: 'Duty Captain A. Nair',
+      duration: 'Until 22:00 IST',
+    },
+  ]);
+  const [deleteHoldTarget, setDeleteHoldTarget] = useState<TableHold | null>(null);
+
+  const handleConfirmReleaseHold = () => {
+    if (!deleteHoldTarget) return;
+    setTableHolds((prev) => prev.filter((h) => h.id !== deleteHoldTarget.id));
+    onShowToast(
+      'Table Hold Released',
+      `Released ${deleteHoldTarget.tableNumber} at ${deleteHoldTarget.outpost}. Returned to live floor dispatch.`,
+      'success'
+    );
+    setDeleteHoldTarget(null);
+  };
 
   // Filtered nodes
   const displayLocations = currentLocation === 'all' 
@@ -108,53 +159,63 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
         {/* Filter Toolbar */}
         <div className="flex flex-wrap items-center gap-2">
           <div className="bg-white p-1 rounded-2xl border border-[#e8decb] flex items-center gap-1 shadow-xs">
-            <button
-              onClick={() => setTimeframe('today')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                timeframe === 'today'
-                  ? 'bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] text-[#92400e] border border-[#fde68a] shadow-xs'
-                  : 'text-[#57534e] hover:text-[#1c1917] hover:bg-[#faf8f5]'
-              }`}
-            >
-              Today
-            </button>
-            <button
-              onClick={() => setTimeframe('yesterday')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                timeframe === 'yesterday'
-                  ? 'bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] text-[#92400e] border border-[#fde68a] shadow-xs'
-                  : 'text-[#57534e] hover:text-[#1c1917] hover:bg-[#faf8f5]'
-              }`}
-            >
-              Yesterday
-            </button>
-            <button
-              onClick={() => setTimeframe('7d')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                timeframe === '7d'
-                  ? 'bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] text-[#92400e] border border-[#fde68a] shadow-xs'
-                  : 'text-[#57534e] hover:text-[#1c1917] hover:bg-[#faf8f5]'
-              }`}
-            >
-              7D Rolling
-            </button>
+            <Tooltip content="Show metrics for today's active service" position="bottom">
+              <button
+                onClick={() => setTimeframe('today')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  timeframe === 'today'
+                    ? 'bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] text-[#92400e] border border-[#fde68a] shadow-xs'
+                    : 'text-[#57534e] hover:text-[#1c1917] hover:bg-[#faf8f5]'
+                }`}
+              >
+                Today
+              </button>
+            </Tooltip>
+            <Tooltip content="Compare against yesterday's consolidated gross" position="bottom">
+              <button
+                onClick={() => setTimeframe('yesterday')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  timeframe === 'yesterday'
+                    ? 'bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] text-[#92400e] border border-[#fde68a] shadow-xs'
+                    : 'text-[#57534e] hover:text-[#1c1917] hover:bg-[#faf8f5]'
+                }`}
+              >
+                Yesterday
+              </button>
+            </Tooltip>
+            <Tooltip content="Rolling 7-day average metrics across all outposts" position="bottom">
+              <button
+                onClick={() => setTimeframe('7d')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  timeframe === '7d'
+                    ? 'bg-gradient-to-r from-[#fef3c7] to-[#fffbeb] text-[#92400e] border border-[#fde68a] shadow-xs'
+                    : 'text-[#57534e] hover:text-[#1c1917] hover:bg-[#faf8f5]'
+                }`}
+              >
+                7D Rolling
+              </button>
+            </Tooltip>
           </div>
 
-          <button
-            onClick={() => onShowToast('Node Filter Ready', 'Displaying operational metrics across Mumbai, Delhi, Bengaluru, Hyderabad, Kolkata & Chennai.')}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#faf8f5] text-[#1c1917] text-xs font-bold border border-[#e8decb] hover:border-[#b45309]/30 transition-all shadow-xs cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-base text-[#b45309]">tune</span>
-            <span>Filter Nodes</span>
-          </button>
+          <Tooltip content="Filter specific metro outpost telemetry" subcontent="6 Cities" position="bottom">
+            <button
+              onClick={() => onShowToast('Node Filter Ready', 'Displaying operational metrics across Mumbai, Delhi, Bengaluru, Hyderabad, Kolkata & Chennai.')}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#faf8f5] text-[#1c1917] text-xs font-bold border border-[#e8decb] hover:border-[#b45309]/30 transition-all shadow-xs cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-base text-[#b45309]">tune</span>
+              <span>Filter Nodes</span>
+            </button>
+          </Tooltip>
 
-          <button
-            onClick={handleExportCSV}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#faf8f5] text-[#1c1917] text-xs font-bold border border-[#e8decb] hover:border-[#b45309]/30 transition-all shadow-xs cursor-pointer"
-          >
-            <span className="material-symbols-outlined text-base text-[#b45309]">download</span>
-            <span>Audit CSV (INR)</span>
-          </button>
+          <Tooltip content="Export comprehensive CSV audit package in INR" subcontent="6 Metros" position="bottom">
+            <button
+              onClick={handleExportCSV}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-[#faf8f5] text-[#1c1917] text-xs font-bold border border-[#e8decb] hover:border-[#b45309]/30 transition-all shadow-xs cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-base text-[#b45309]">download</span>
+              <span>Audit CSV (INR)</span>
+            </button>
+          </Tooltip>
         </div>
       </div>
 
@@ -882,6 +943,60 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
             </button>
           </div>
         </div>
+
+        {/* Active Table Holds & Reservation Directives */}
+        <div className="bg-white border border-[#e8decb] rounded-2xl p-6 shadow-xs space-y-4 mt-6">
+          <div className="flex items-center justify-between pb-2 border-b border-[#f0ece1]">
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-[#b45309] text-xl">event_seat</span>
+              <div>
+                <h3 className="font-headline font-bold text-base text-[#1c1917]">
+                  Active Table Holds & VIP Security Directives
+                </h3>
+                <p className="text-xs text-[#78716c]">
+                  Operational holds placed by Floor Captains and General Managers across metropolitan outposts.
+                </p>
+              </div>
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#fef3c7] text-[#92400e] border border-[#fde68a]">
+              {tableHolds.length} Active Holds
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {tableHolds.map((hold) => (
+              <div
+                key={hold.id}
+                className="p-4 rounded-xl bg-[#faf8f5] border border-[#e8decb] flex flex-col justify-between space-y-3 hover:border-[#b45309]/40 transition-colors shadow-xs"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-sm text-[#1c1917]">{hold.tableNumber}</span>
+                    <span className="text-[10px] font-bold text-[#b45309] bg-white px-2 py-0.5 rounded-md border border-[#e8decb]">
+                      {hold.duration}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-[#78716c] font-medium">{hold.outpost}</div>
+                  <p className="text-xs text-[#57534e] mt-1">{hold.reason}</p>
+                  <div className="text-[10px] text-[#78716c] italic">By: {hold.heldBy}</div>
+                </div>
+
+                <div className="pt-2 border-t border-[#e8decb] flex items-center justify-end">
+                  <Tooltip content="Release & Delete Table Hold" subcontent="Double Verification Required">
+                    <button
+                      type="button"
+                      onClick={() => setDeleteHoldTarget(hold)}
+                      className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#fef2f2] text-[#dc2626] font-bold text-xs border border-[#fecaca] hover:border-[#dc2626] transition-all flex items-center gap-1 cursor-pointer shadow-xs"
+                    >
+                      <span className="material-symbols-outlined text-sm">lock_open</span>
+                      <span>Release Hold</span>
+                    </button>
+                  </Tooltip>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Branch Cockpit Modal with Radiant Luxury Light Palette */}
@@ -1041,6 +1156,22 @@ export const BranchOverviewView: React.FC<BranchOverviewViewProps> = ({
           </div>
         </div>
       )}
+
+      {/* Double Verification Modal for Table Hold Release / Deletion */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deleteHoldTarget}
+        onClose={() => setDeleteHoldTarget(null)}
+        onConfirm={handleConfirmReleaseHold}
+        itemName={deleteHoldTarget ? `${deleteHoldTarget.tableNumber} (${deleteHoldTarget.outpost})` : ''}
+        itemType="VIP Table Reservation Hold"
+        itemSubdetails={
+          deleteHoldTarget
+            ? `Reason: ${deleteHoldTarget.reason} • Held by: ${deleteHoldTarget.heldBy} • Duration: ${deleteHoldTarget.duration}`
+            : undefined
+        }
+        warningNote="Releasing this table hold immediately returns the seating alcove to the live floor captain dispatch queue and accepts online reservations."
+        requireTyping={true}
+      />
     </div>
   );
 };

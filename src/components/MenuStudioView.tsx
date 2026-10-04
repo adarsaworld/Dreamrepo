@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { MenuItem } from '../types';
 import { INITIAL_MENU_ITEMS } from '../data/mockData';
+import { Tooltip } from './Tooltip';
+import { DoubleDeleteConfirmModal } from './DoubleDeleteConfirmModal';
 
 interface MenuStudioViewProps {
   onShowToast: (title: string, desc: string, type?: 'success' | 'warning' | 'info') => void;
@@ -25,6 +27,9 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
   const [newTagInput, setNewTagInput] = useState('');
   const [showAddTagInput, setShowAddTagInput] = useState(false);
 
+  // Double Verification Delete Target
+  const [deleteDishTarget, setDeleteDishTarget] = useState<{ title: string; category?: string; code?: string } | null>(null);
+
   // Branch activation checkboxes for Indian metros
   const [branchActive, setBranchActive] = useState({
     mumbai: true,
@@ -32,6 +37,16 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
     bengaluru: true,
     hyderabad: false,
   });
+
+  const handleConfirmDeleteDish = () => {
+    if (!deleteDishTarget) return;
+    onShowToast(
+      'Dish Purged from Master Catalog',
+      `Permanently removed "${deleteDishTarget.title}" from active degustation and aggregator APIs.`,
+      'warning'
+    );
+    setDeleteDishTarget(null);
+  };
 
   // Modals
   const [deployModalOpen, setDeployModalOpen] = useState(false);
@@ -120,30 +135,38 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
 
           {/* Action Cluster */}
           <div className="flex items-center gap-2.5 flex-wrap">
-            <button
-              onClick={() => setPreviewModalOpen(true)}
-              type="button"
-              className="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#1c1917] text-xs font-bold border border-[#e8decb] hover:border-[#b45309]/30 shadow-xs transition-all cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-base text-[#b45309]">view_in_ar</span>
-              <span>Preview Digital Menu</span>
-            </button>
-            <button
-              onClick={() => onShowToast('Inter-State Tax Verified', 'GST calibration verified across Maharashtra, Delhi-NCR, Karnataka, and Telangana.')}
-              type="button"
-              className="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#1c1917] text-xs font-bold border border-[#e8decb] hover:border-[#b45309]/30 shadow-xs transition-all cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-base text-[#78716c]">currency_exchange</span>
-              <span>GST & Pricing Audit</span>
-            </button>
-            <button
-              onClick={() => setDeployModalOpen(true)}
-              type="button"
-              className="flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-[#f59e0b] via-[#ea580c] to-[#d97706] text-white text-xs font-bold shadow-[0_4px_16px_rgba(245,158,11,0.35)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.5)] hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-base">rocket_launch</span>
-              <span>Deploy / Distribute to Metros</span>
-            </button>
+            <Tooltip content="Digital Guest Tablet Preview" subcontent="120Hz OLED Emulation">
+              <button
+                onClick={() => setPreviewModalOpen(true)}
+                type="button"
+                className="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#1c1917] text-xs font-bold border border-[#e8decb] hover:border-[#b45309]/30 shadow-xs transition-all cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-base text-[#b45309]">view_in_ar</span>
+                <span>Preview Digital Menu</span>
+              </button>
+            </Tooltip>
+
+            <Tooltip content="Inter-State Tax Compliance Audit" subcontent="CGST/SGST/IGST Verification">
+              <button
+                onClick={() => onShowToast('Inter-State Tax Verified', 'GST calibration verified across Maharashtra, Delhi-NCR, Karnataka, and Telangana.')}
+                type="button"
+                className="flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-xl bg-[#faf8f5] hover:bg-[#f4eee2] text-[#1c1917] text-xs font-bold border border-[#e8decb] hover:border-[#b45309]/30 shadow-xs transition-all cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-base text-[#78716c]">currency_exchange</span>
+                <span>GST & Pricing Audit</span>
+              </button>
+            </Tooltip>
+
+            <Tooltip content="Publish to All Indian Metros" subcontent="Edge Cache Invalidation">
+              <button
+                onClick={() => setDeployModalOpen(true)}
+                type="button"
+                className="flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-[#f59e0b] via-[#ea580c] to-[#d97706] text-white text-xs font-bold shadow-[0_4px_16px_rgba(245,158,11,0.35)] hover:shadow-[0_6px_22px_rgba(245,158,11,0.5)] hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-base">rocket_launch</span>
+                <span>Deploy / Distribute to Metros</span>
+              </button>
+            </Tooltip>
           </div>
         </div>
       </section>
@@ -183,10 +206,12 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
           <div className="rounded-2xl bg-white border border-[#e8decb] p-6 shadow-[0_10px_25px_-5px_rgba(217,119,6,0.06)] space-y-5">
             {/* Header & Fast-Toggles */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#f0ece1]">
-              <div className="space-y-1">
-                <span className="text-[10px] uppercase font-bold tracking-wider text-[#78716c]">
-                  Selected Item #0482-OM
-                </span>
+              <div className="space-y-1 flex-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[#78716c]">
+                    Selected Item #0482-OM
+                  </span>
+                </div>
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
@@ -194,20 +219,30 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
                     onChange={(e) => setDishTitle(e.target.value)}
                     className="bg-[#faf8f5] text-[#1c1917] font-headline font-bold text-lg px-3 py-1.5 rounded-xl w-full max-w-md focus:outline-none focus:ring-2 focus:ring-[#f59e0b]/50 border border-[#e8decb]"
                   />
-                  <span className="material-symbols-outlined text-[#78716c] text-lg">lock_open</span>
+                  <Tooltip content="Delete Dish from Catalog" subcontent="Double Verification Required">
+                    <button
+                      type="button"
+                      onClick={() => setDeleteDishTarget({ title: dishTitle, category: selectedCategory, code: '#0482-OM' })}
+                      className="p-2 rounded-xl text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] border border-transparent hover:border-[#fecaca] transition-all cursor-pointer flex items-center justify-center shrink-0"
+                    >
+                      <span className="material-symbols-outlined text-lg">delete</span>
+                    </button>
+                  </Tooltip>
                 </div>
               </div>
 
               <div className="flex items-center gap-1.5 bg-[#ecfdf5] p-1.5 rounded-xl border border-[#a7f3d0] shrink-0 self-start sm:self-auto">
                 <span className="material-symbols-outlined text-[#047857] text-base ml-1">videocam</span>
                 <span className="text-[11px] font-bold text-[#065f46] px-1">AR/Video Preview</span>
-                <button
-                  type="button"
-                  onClick={() => setPreviewModalOpen(true)}
-                  className="px-2.5 py-1 rounded-lg bg-white hover:bg-[#faf8f5] text-[#1c1917] text-[11px] font-bold border border-[#a7f3d0] transition-all cursor-pointer shadow-xs"
-                >
-                  Interactive Mode
-                </button>
+                <Tooltip content="Launch 3D Visualizer" subcontent="AR Spatial Plating">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewModalOpen(true)}
+                    className="px-2.5 py-1 rounded-lg bg-white hover:bg-[#faf8f5] text-[#1c1917] text-[11px] font-bold border border-[#a7f3d0] transition-all cursor-pointer shadow-xs"
+                  >
+                    Interactive Mode
+                  </button>
+                </Tooltip>
               </div>
             </div>
 
@@ -973,6 +1008,18 @@ export const MenuStudioView: React.FC<MenuStudioViewProps> = ({ onShowToast }) =
           </div>
         </div>
       )}
+
+      {/* Double Verification Modal for Dish Deletion */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deleteDishTarget}
+        onClose={() => setDeleteDishTarget(null)}
+        onConfirm={handleConfirmDeleteDish}
+        itemName={deleteDishTarget ? deleteDishTarget.title : ''}
+        itemType="Master Catalog Menu Dish"
+        itemSubdetails={deleteDishTarget ? `Catalog Reference: ${deleteDishTarget.code || '#0482-OM'} • Category: ${deleteDishTarget.category || 'Starters'}` : undefined}
+        warningNote="Deleting this dish from the catalog will permanently remove it from guest tablet menus, purge QR code ordering entries, and delist it from Swiggy Gourmet and Zomato Legends."
+        requireTyping={true}
+      />
     </div>
   );
 };

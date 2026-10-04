@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LocationId } from '../types';
+import { Tooltip } from './Tooltip';
 
 interface QuickOrderModalProps {
   isOpen: boolean;
@@ -70,30 +71,34 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
 
         {/* Mode Switcher */}
         <div className="flex items-center gap-1 p-1 bg-[#faf8f5] rounded-xl border border-[#e8decb]">
-          <button
-            type="button"
-            onClick={() => setOrderType('reserve')}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${
-              orderType === 'reserve'
-                ? 'bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white shadow-xs'
-                : 'text-[#57534e] hover:text-[#1c1917]'
-            }`}
-          >
-            <span className="material-symbols-outlined text-base">table_restaurant</span>
-            <span>Table Reservation (Dine-In)</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setOrderType('delivery')}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${
-              orderType === 'delivery'
-                ? 'bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white shadow-xs'
-                : 'text-[#57534e] hover:text-[#1c1917]'
-            }`}
-          >
-            <span className="material-symbols-outlined text-base">moped</span>
-            <span>Priority Fleet Delivery</span>
-          </button>
+          <Tooltip content="Reserve fine dining table in Royal Durbar" position="bottom" className="flex-1">
+            <button
+              type="button"
+              onClick={() => setOrderType('reserve')}
+              className={`w-full py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                orderType === 'reserve'
+                  ? 'bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white shadow-xs'
+                  : 'text-[#57534e] hover:text-[#1c1917]'
+              }`}
+            >
+              <span className="material-symbols-outlined text-base">table_restaurant</span>
+              <span>Table Reservation (Dine-In)</span>
+            </button>
+          </Tooltip>
+          <Tooltip content="Dispatch priority temperature-controlled courier" position="bottom" className="flex-1">
+            <button
+              type="button"
+              onClick={() => setOrderType('delivery')}
+              className={`w-full py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                orderType === 'delivery'
+                  ? 'bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white shadow-xs'
+                  : 'text-[#57534e] hover:text-[#1c1917]'
+              }`}
+            >
+              <span className="material-symbols-outlined text-base">moped</span>
+              <span>Priority Fleet Delivery</span>
+            </button>
+          </Tooltip>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -245,20 +250,24 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 rounded-xl bg-white hover:bg-[#faf8f5] text-xs font-bold text-[#57534e] border border-[#e8decb] transition-colors cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white text-xs font-bold shadow-md hover:brightness-110 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-sm">bolt</span>
-                <span>Direct Fire Order</span>
-              </button>
+              <Tooltip content="Discard and close reservation dialog">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-2 rounded-xl bg-white hover:bg-[#faf8f5] text-xs font-bold text-[#57534e] border border-[#e8decb] transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </Tooltip>
+              <Tooltip content="Fire order to KDS line & record in VIP ledger" subcontent="Instant POS Injection">
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#f59e0b] to-[#ea580c] text-white text-xs font-bold shadow-md hover:brightness-110 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-sm">bolt</span>
+                  <span>Direct Fire Order</span>
+                </button>
+              </Tooltip>
             </div>
           </div>
         </form>

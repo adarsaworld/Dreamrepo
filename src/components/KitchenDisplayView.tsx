@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { KDSTicket, KDSStation, CourseStage } from '../types';
 import { INITIAL_KDS_TICKETS } from '../data/enterpriseData';
+import { Tooltip } from './Tooltip';
+import { DoubleDeleteConfirmModal } from './DoubleDeleteConfirmModal';
 
 interface KitchenDisplayViewProps {
   onShowToast: (title: string, desc: string, type?: 'success' | 'warning' | 'info') => void;
@@ -14,6 +16,20 @@ export const KitchenDisplayView: React.FC<KitchenDisplayViewProps> = ({ onShowTo
   const [statusFilter, setStatusFilter] = useState<'cooking' | 'ready_for_pickup' | 'bumped'>('cooking');
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [kitchenRushActive, setKitchenRushActive] = useState(false);
+
+  // Double Verification Delete Target
+  const [deleteTicketTarget, setDeleteTicketTarget] = useState<KDSTicket | null>(null);
+
+  const handleConfirmDeleteTicket = () => {
+    if (!deleteTicketTarget) return;
+    setTickets((prev) => prev.filter((t) => t.id !== deleteTicketTarget.id));
+    onShowToast(
+      'Kitchen Ticket Voided & Deleted',
+      `Voided ticket ${deleteTicketTarget.orderNumber} (${deleteTicketTarget.tableNumber}). Stations notified.`,
+      'warning'
+    );
+    setDeleteTicketTarget(null);
+  };
 
   // Live timer tick every 10 seconds to update elapsed time
   useEffect(() => {
@@ -457,27 +473,54 @@ export const KitchenDisplayView: React.FC<KitchenDisplayViewProps> = ({ onShowTo
                     {ticket.items.filter((i) => i.isReady).length}/{ticket.items.length} Ready
                   </span>
 
-                  {ticket.status !== 'bumped' ? (
-                    <button
-                      type="button"
-                      onClick={() => handleBumpTicket(ticket.id, ticket.orderNumber)}
-                      className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#047857] to-[#059669] text-white font-bold text-xs flex items-center gap-1 shadow-xs hover:brightness-110 active:scale-95 transition-all cursor-pointer"
-                    >
-                      <span className="material-symbols-outlined text-sm">done_all</span>
-                      <span>Bump Ticket</span>
-                    </button>
-                  ) : (
-                    <span className="text-xs font-bold text-[#047857] flex items-center gap-1">
-                      <span className="material-symbols-outlined text-sm">verified</span>
-                      Completed
-                    </span>
-                  )}
+                  <div className="flex items-center gap-1.5">
+                    {/* Void / Cancel Ticket (Double Verification) */}
+                    <Tooltip content="Void & Cancel Ticket" subcontent="Double Verification Required">
+                      <button
+                        type="button"
+                        onClick={() => setDeleteTicketTarget(ticket)}
+                        className="p-1.5 rounded-xl text-[#78716c] hover:text-[#dc2626] hover:bg-[#fef2f2] border border-transparent hover:border-[#fecaca] transition-all cursor-pointer"
+                      >
+                        <span className="material-symbols-outlined text-sm">delete</span>
+                      </button>
+                    </Tooltip>
+
+                    {ticket.status !== 'bumped' ? (
+                      <Tooltip content="Bump Ticket to Runner" subcontent="Advances Course & Clears KDS">
+                        <button
+                          type="button"
+                          onClick={() => handleBumpTicket(ticket.id, ticket.orderNumber)}
+                          className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#047857] to-[#059669] text-white font-bold text-xs flex items-center gap-1 shadow-xs hover:brightness-110 active:scale-95 transition-all cursor-pointer"
+                        >
+                          <span className="material-symbols-outlined text-sm">done_all</span>
+                          <span>Bump Ticket</span>
+                        </button>
+                      </Tooltip>
+                    ) : (
+                      <span className="text-xs font-bold text-[#047857] flex items-center gap-1">
+                        <span className="material-symbols-outlined text-sm">verified</span>
+                        Completed
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
       )}
+
+      {/* Double Verification Modal for Ticket Voiding */}
+      <DoubleDeleteConfirmModal
+        isOpen={!!deleteTicketTarget}
+        onClose={() => setDeleteTicketTarget(null)}
+        onConfirm={handleConfirmDeleteTicket}
+        itemName={deleteTicketTarget ? `${deleteTicketTarget.orderNumber} (${deleteTicketTarget.tableNumber})` : ''}
+        itemType="Live Kitchen Ticket"
+        itemSubdetails={deleteTicketTarget ? `Server: ${deleteTicketTarget.serverName} • Covers: ${deleteTicketTarget.coversCount} • Elapsed: ${deleteTicketTarget.elapsedMinutes}m` : undefined}
+        warningNote="Voiding this ticket halts all station prep immediately (Tandoor, Handi, Halwai) and notifies table captains that this order was cancelled."
+        requireTyping={true}
+      />
     </div>
   );
 };
